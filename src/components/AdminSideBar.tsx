@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiLogin } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import  useUserStore  from "../../store/store";
 import api, { setAccessToken } from "../api/axiosIntercepter"; // our Axios instance
 import { useToast } from "@/hooks/use-toast";
+import { IoMdSettings } from "react-icons/io";
+
 function AdminSideBar() {
   const routes = [
     {
@@ -55,7 +57,7 @@ function AdminSideBar() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-
+  const [openSide , setOpenSide] =useState(true);
 
     const handleLogout = async () => {
       try {
@@ -81,45 +83,95 @@ function AdminSideBar() {
     };
   
   return (
-    <nav className="bg-[#f7f7f8] h-screen fixed top-0 left-0 min-w-[250px] border  py-6 px-4">
-      <div className="relative flex  items-center justify-center mb-6">
-        <Link to="/admin">
-          <img
-            src={"/logo.svg"}
-            alt={"Image du produit"}
-            className="w w-[150px] h-20 p-2 rounded-2xl"
-          />
-        </Link>
-      </div>
+    <>
+      <nav className="bg-[#f7f7f8]   hidden  h-screen  lg:block   lg:min-w-[250px] border  py-6 px-4">
+        <div className="relative flex  items-center justify-center mb-6">
+          <Link to="/admin">
+            <img
+              src={"/logo.svg"}
+              alt={"Image du produit"}
+              className="w w-[150px] h-20 p-2 rounded-2xl"
+            />
+          </Link>
+        </div>
 
-      <div className="overflow-auto h-full">
-        <ul className="space-y-2">
-          {routes.map((route) => (
-            <li key={route.path}>
-              <Link
-                to={route.path}
-                className="text-slate-800 font-medium hover:text-slate-900 hover:bg-gray-200 text-[15px] flex items-center rounded px-4 py-2 transition-all"
-              >
-                {route.icon}
-                <span>{route.name}</span>
-              </Link>
-            </li>
-          ))}
-          <button 
-          className="mt-10"
-          onClick={handleLogout}
-          >
-            <div className="flex hover:bg-gray-200  transition-all items-center">
-              <CiLogin color="red" size={30} />
-              <h1 className="text-slate-800 font-medium hover:text-slate-900 text-[15px] flex items-center rounded px-4 py-2 ">
-                {" "}
-                Déconnecter
-              </h1>
-            </div>
-          </button>
-        </ul>
+        <div className="overflow-auto h-full">
+          <ul className="space-y-2">
+            {routes.map((route) => (
+              <li key={route.path}>
+                <Link
+                  onClick={() => setOpenSide(true)}
+                  to={route.path}
+                  className="text-slate-800 font-medium hover:text-slate-900 hover:bg-gray-200 text-[15px] flex items-center rounded px-4 py-2 transition-all"
+                >
+                  {route.icon}
+                  <span>{route.name}</span>
+                </Link>
+              </li>
+            ))}
+            <button className="mt-10" onClick={handleLogout}>
+              <div className="flex hover:bg-gray-200  transition-all items-center">
+                <CiLogin color="red" size={30} />
+                <h1 className="text-slate-800 font-medium hover:text-slate-900 text-[15px] flex items-center rounded px-4 py-2 ">
+                  {" "}
+                  Déconnecter
+                </h1>
+              </div>
+            </button>
+          </ul>
+        </div>
+      </nav>
+      {/*the fixed one  */}
+
+      <div
+        className={`    ${
+          openSide ? " translate-x-[-220px] " : "translate-x-[0px] "
+        }
+ bg-[#f7f7f8]    lg:hidden z-[99]  h-screen   animate-scale-in  transition-all fixed top-0 left-0  border  py-6 px-4    `}
+      >
+        <button
+          className="border-r-2 border-b-2  bg-[#f7f7f8]  absolute rounded-r-full right-[-40px] p-2 "
+          onClick={() => setOpenSide(!openSide)}
+        >
+          <IoMdSettings size={25} />
+        </button>
+        <div className="relative flex  items-center justify-center mb-6">
+          <Link to="/admin">
+            <img
+              src={"/logo.svg"}
+              alt={"Image du produit"}
+              className="w w-[150px] h-20 p-2 rounded-2xl"
+            />
+          </Link>
+        </div>
+
+        <div className="overflow-auto h-full">
+          <ul className="space-y-2">
+            {routes.map((route) => (
+              <li key={route.path}>
+                <Link
+                  onClick={() => setOpenSide(true)}
+                  to={route.path}
+                  className="text-slate-800 font-medium hover:text-slate-900 hover:bg-gray-200 text-[15px] flex items-center rounded px-4 py-2 transition-all"
+                >
+                  {route.icon}
+                  <span>{route.name}</span>
+                </Link>
+              </li>
+            ))}
+            <button className="mt-10" onClick={handleLogout}>
+              <div className="flex hover:bg-gray-200  transition-all items-center">
+                <CiLogin color="red" size={30} />
+                <h1 className="text-slate-800 font-medium hover:text-slate-900 text-[15px] flex items-center rounded px-4 py-2 ">
+                  {" "}
+                  Déconnecter
+                </h1>
+              </div>
+            </button>
+          </ul>
+        </div>
       </div>
-    </nav>
+    </>
   );
 }
 

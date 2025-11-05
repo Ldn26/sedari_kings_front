@@ -6,7 +6,7 @@ function AdminLayout() {
   return (
     <div className="flex h-screen overflow-hidden w-full ">
       <AdminSideBar />
-      <div className="flex-1 ml-[250px] p-6">
+      <div className="flex-1   p-6">
         <Outlet />
       </div>
     </div>

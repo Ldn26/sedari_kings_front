@@ -11,7 +11,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [product, setProduct] = useState<any>(null);
+  // const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
@@ -98,30 +98,40 @@ export default function ProductDetail() {
   //   setLoading(false);
   // };
 
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container mx-auto px-4 py-20 text-center">
-          <p className="text-xl text-muted-foreground">Chargement...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (!product) {
+  //   return (
+  //     <div className="min-h-screen bg-background">
+  //       <Navbar />
+  //       <div className="container mx-auto px-4 py-20 text-center">
+  //         <p className="text-xl text-muted-foreground">Chargement...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  const product = {
+    id: "1",
+    name: "Chaise Moderne",
+    description: "Une chaise moderne et confortable, parfaite pour votre salon ou bureau.",
+    price: 49.99,
+    category: "chaises",
+    stock: 25,
+    image_url: "/placeholder.svg",
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      {/* <Navbar /> */}
       
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="animate-fade-in">
             <div className="aspect-square overflow-hidden rounded-lg bg-muted">
-              <img
+              {/* <img
                 src={product.image_url || "/placeholder.svg"}
                 alt={product.name}
                 className="w-full h-full object-cover"
-              />
+              /> */}
             </div>
           </div>
 
@@ -130,12 +140,12 @@ export default function ProductDetail() {
               <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
                 {product.category}
               </p>
-              <h1 className="text-4xl font-bold mb-4 text-foreground">{product.name}</h1>
+              <h1 className="text-4xl font-bold mb-4 text-foreground">{product?.name}</h1>
               <p className="text-3xl font-bold text-accent">{product.price.toFixed(2)} €</p>
             </div>
 
             <div className="border-t border-b border-border py-6">
-              <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+              <p className="text-muted-foreground leading-relaxed">{product?.description}</p>
             </div>
 
             <div className="space-y-4">
@@ -145,16 +155,16 @@ export default function ProductDetail() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    // onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="px-6 py-2 font-medium">{quantity}</span>
+                  {/* <span className="px-6 py-2 font-medium">{quantity}</span> */}
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                    // onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                     disabled={quantity >= product.stock}
                   >
                     <Plus className="h-4 w-4" />

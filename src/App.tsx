@@ -17,6 +17,7 @@ import ManageProducts from "./pages/admin/ManageProducts";
 import Notifications from "./pages/admin/Notifications";
 import Dashboard from "./pages/admin/Dashboard";
 import Users from "./pages/admin/Users";
+import GetProductPopUp from "./components/GetProductPopUp";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => (
             <Route index element={<Dashboard />} />
             <Route path="manage-products" element={<ManageProducts />} />
             <Route path="notifications" element={<Notifications />} />
+            {/* <Route path="produit/:id" element={<GetProductPopUp  />} /> */}
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="users" element={<Users />} />
           </Route>

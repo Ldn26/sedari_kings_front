@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 
 import ProductTableItem from "@/components/ProductTableItem";
 import AddProductPopUp from "@/components/AddProductPopUp";
+import { useQuery } from "@tanstack/react-query";
+import api  from "../../api/axiosIntercepter";
 export default function Admin() {
-
-  // const [products, setProducts] = useState<any[]>([]);
+  // cons  t [products, setProducts] = useState<any[]>([]);
 
   const [openModel , setOpenModel] = useState(false); 
   const [search , setSearch] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -22,6 +24,26 @@ export default function Admin() {
   // useEffect(() => {
   //   checkAdminAndFetchProducts();
   // }, []);
+
+
+    const { data : products, isLoading, refetch , isSuccess } = useQuery({
+      queryKey: ["products"],
+      queryFn: async () => {
+        const res = await api.get("/products", {});
+        return res.data;
+      },
+      // keepPreviousData : true,
+      // onSuccess : (data) => {
+      //   if(selectedCategory === "all"){
+      //     setProducts(data);
+      //   } else {
+      //     const filtered = data.filter((product: any) => product.category === selectedCategory);
+      //     setProducts(filtered);
+      //   }
+      // }
+    });
+
+console.log(products)
 
   const checkAdminAndFetchProducts = async () => {
     // const { data: { user } } = await supabase.auth.getUser();
@@ -96,6 +118,10 @@ export default function Admin() {
 //     setLoading(false);
 //   };
 
+    
+
+
+
   const deleteProduct = async (id: string) => {
     // const { error } = await supabase.from('products').delete().eq('id', id);
 
@@ -108,75 +134,28 @@ export default function Admin() {
     }
   };
 
-  // if (loading || !isAdmin) {
-  //   return (
-  //     <div className="min-h-screen bg-background">
-  //       <Navbar />
-  //       <div className="container mx-auto px-4 py-20 text-center">
-  //         <p className="text-xl text-muted-foreground">Chargement...</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-20 text-center">
+          <p className="text-xl text-muted-foreground">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const products = [
-    {
-      id: "1",
-      name: "Chaise en bois",
-      category: "chaises",
-      price: 49.99,
-      stock: 20,
-      image_url: "",
-    },
-    {
-      id: "2",
-      name: "Table en verre",
-      category: "tables",
-      price: 199.99,
-      stock: 10,
-      image_url: "",
-    },
-    {
-      id: "3",
-      name: "Canapé moderne",
-      category: "meubles",
-      price: 499.99,
-      stock: 5,
-      image_url: "",
-    },
-    {      id: "4",
-      name: "Bibliothèque en métal",
-      category: "meubles",
-      price: 149.99,
-      stock: 8,
-      image_url: "",
-    },
-    {      id: "5",
-      name: "Tabouret de bar",
-      category: "chaises",
-      price: 39.99,
-      stock: 15,
-      image_url: "",
-    } , 
-    {      id: "6",
-      name: "Buffet vintage",
-      category: "meubles",
-      price: 299.99,
-      stock: 4,
-      image_url: "",
-    }
-    , {      id: "7",
-      name: "Table basse",
-      category: "tables",
-      price: 89.99,
-      stock: 12,
-      image_url: "",
-    }
-  ]; 
+
+  //     id: "1",
+  //     name: "Chaise en bois",
+  //     category: "chaises",
+  //     price: 49.99,
+  //     stock: 20,
+  //     image_url: "",
+ 
 
   return (
     <div className=" bg-background">
-      {openModel && <AddProductPopUp  setOpenModel={setOpenModel}/>}
+      {openModel && <AddProductPopUp setOpenModel={setOpenModel} />}
       <div className="container mx-auto px-4 ">
         <div className="w-full ">
           <input
@@ -195,18 +174,21 @@ export default function Admin() {
         </button>
 
         <div className="grid lg:grid-cols-2 gap-8"></div>
-        <div className="space-y-4     max-h-[600px] overflow-y-auto">
-          <div className="hidden sm:flex items-center justify-between w-full px-2 py-2 border-b border-gray-400 font-semibold text-sm text-muted-foreground">
+        {/* table header */}
+          <div className="hidden  sm:flex items-center justify-between w-full px-2 py-2 border-b border-gray-400 font-semibold text-sm text-muted-foreground">
             <div className="w-24">Image</div>
-            <div className="flex-1 t sm:w-1/5">Name</div>
-            <div className="flex-1 sm:w-1/5">Category</div>
+            <div className="flex-1 text-center  sm:w-1/5">Name</div>
+            <div className="flex-1 text-center sm:w-1/5">Category</div>
             <div className="flex-1 sm:w-1/5">Price</div>
-            <div className="flex-1 sm:w-1/5">Stock</div>
+            <div className="flex-1 text-center sm:w-1/5">Stock</div>
             <div className="flex gap-1  w-24 justify-end">Actions</div>
           </div>
-          {products.map((product) => (
+        <div className="space-y-4     max-h-[600px] overflow-y-auto">
+          {isSuccess && (
+          products.products.map((product) => (
             <ProductTableItem key={product.id} product={product} />
-          ))}
+          )) 
+          )}
         </div>
       </div>
     </div>

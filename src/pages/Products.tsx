@@ -4,27 +4,16 @@ import { ProductCard } from "@/components/ProductCard";
 // import { supabase } from "@/integrations/supabase/client";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-
+import { useQuery } from "@tanstack/react-query";
+import api  from "../api/axiosIntercepter";
 export default function Products() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(category || "all");
 
-  // useEffect(() => {
-  //   // fetchProducts();
-  // }, [selectedCategory]);
 
-  // const fetchProducts = async () => {
-  //   let query = supabase.from('products').select('*');
-    
-  //   if (selectedCategory !== "all") {
-  //     query = query.eq('category', selectedCategory);
-  //   }
-    
-  //   const { data } = await query;
-  //   if (data) setProducts(data);
-  // };
+                
 
   const categories = [
     { value: "all", label: "Tous" },
