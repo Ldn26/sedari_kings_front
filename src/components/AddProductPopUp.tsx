@@ -13,20 +13,12 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useCreateProduct } from "../api/Products";
-
+import categories  from "../data/categories";
+import { useToast } from "@/hooks/use-toast";
 function AddProductPopUp({setOpenModel} : {setOpenModel: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [loading, setLoading] = useState(false);
-const { createProduct, isLoading, isError, data, error } = useCreateProduct();
-const handelAddProduct = () => {
-  createProduct({
-    name: "Table",
-    desc: "Table en bois",
-    price: 120,
-    quantity: 5,
-    category: "tables",
-    image_url: "https://example.com/table.jpg",
-  });
-};     
+const { createProduct, isLoading, isError, data, error, isSuccess } = useCreateProduct();
+const { toast } = useToast();
 
 
 const [formData, setFormData] = useState({
@@ -38,7 +30,45 @@ const [formData, setFormData] = useState({
     image_url: "",
   });
   
+  
+
+
+
+
+ const handelAddProduct = () => {
+   if (
+     formData.name == "" ||
+     formData.price == undefined ||
+     formData.category == ""  ||
+      formData.quantity == ""
+   )  return toast({ variant: "destructive", title: "tous les champs obligatoires doivent être remplis", description: "Veuillez remplir tous les champs obligatoires.",
+     });
    
+
+     createProduct({
+       name: formData.name,
+       desc: formData.desc,
+       price: parseFloat(formData.price),
+       category: formData.category,
+       quantity: parseInt(formData.quantity, 10),
+       image_url: formData.image_url,
+     });
+console.log("isSuccess")
+console.log(isSuccess)
+// make the toast green 
+toast({
+  variant: "default",
+  title: "Produit ajouté avec succès !",
+  description: "Le produit a été ajouté à l'inventaire.",
+});  
+      setOpenModel(false);
+
+
+      // setOpenModel(false);
+
+
+ };     
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -106,43 +136,26 @@ const [formData, setFormData] = useState({
                 />
               </div>
             </div>
-  
 
             <div className="space-y-2">
               <Label htmlFor="category">Catégorie</Label>
-              <Select
-                value={formData.category}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, category: value })
+              <select
+                id="category"
+                //  value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
                 }
+                className="w-full border rounded-md px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                {/* Trigger that shows the selected value */}
-                <SelectTrigger className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                  <SelectValue placeholder="Choisir une catégorie" />
-                </SelectTrigger>
-
-                {/* Dropdown Content */}
-                <SelectContent className="bg-white border border-gray-300 rounded-md shadow-lg mt-1 z-50">
-                  <SelectItem
-                    value="tables"
-                    className="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-                  >
-                    Tables
-                  </SelectItem>
-                  <SelectItem
-                    value="chaises"
-                    className="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-                  >
-                    Chaises
-                  </SelectItem>
-                  <SelectItem
-                    value="meubles"
-                    className="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-                  >
-                    Meubles
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+                <option value="" disabled>
+                  Sélectionnez une catégorie
+                </option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-2">
@@ -152,7 +165,11 @@ const [formData, setFormData] = useState({
 
             <div
               onClick={handelAddProduct}
-              className="w-full"
+              className={`w-full flex items-center justify-center p-2 rounded-xl bg-primary  ${
+                isLoading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "opacity-100 cursor-pointer"
+              }  text-white `}
               // disabled={isLoading}
             >
               {isLoading ? "Ajout en cours..." : "Ajouter le Produit"}

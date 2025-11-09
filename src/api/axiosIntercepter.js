@@ -100,11 +100,11 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     // to avoid infinit loop     _retry flag
-    console.log("from the axios intercepter  ")
-    console.log("error .responsoe")
-    console.log(error.response)
-    console.log("the original resequet retry ")
-    console.log(originalRequest)
+    // console.log("from the axios intercepter  ")
+    // console.log("error .responsoe")
+    // console.log(error.response)
+    // console.log("the original resequet retry ")
+    // console.log(originalRequest)
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;

@@ -17,8 +17,6 @@ import ManageProducts from "./pages/admin/ManageProducts";
 import Notifications from "./pages/admin/Notifications";
 import Dashboard from "./pages/admin/Dashboard";
 import Users from "./pages/admin/Users";
-import GetProductPopUp from "./components/GetProductPopUp";
-
 const queryClient = new QueryClient();
 
 const App = () => (

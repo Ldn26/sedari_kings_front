@@ -1,38 +1,71 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@radix-ui/react-select";
-import { Select } from "./ui/select";
+
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import { Loader } from "lucide-react";
-import { useProduct, useDeleteProduct } from "../api/Products";
+import Loader from "../components/Loader";
+import { useProduct, useDeleteProduct, useEditProduct } from "../api/Products";
+import { useToast } from "@/hooks/use-toast";
+import  categories  from "../data/categories";
+
 
 function GetProductPopUp({
   setOpenModel,
   id,
+  deleteProduct,
+  DeleteLoader,
+  allowEdit,
 }: {
   setOpenModel: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
+  deleteProduct: ReturnType<typeof useDeleteProduct>;
+  DeleteLoader: boolean;
+  allowEdit :boolean;
 }) {
   const {
-    deleteProduct,
-    data: deleteData,
-    isLoading: DeleteLoader,
-    isError: DeleteIsError,
-    error: DeleteError,
-  } = useDeleteProduct();
+    isSuccess,
+    updateProduct,
+    isError: EditIsError,
+    isLoading: EditLoading,
+  } = useEditProduct();
+  const { toast } = useToast();
+  const handelEdit = (productId: number) => {
+    if (!formData.name || !formData.desc || !formData.category) {
+      toast({
+        variant: "destructive",
+        title: "Veuillez remplir tous les champs obligatoires.",
+      });
+      return;
+    }
+    updateProduct({ productId, productData: formData });
+    setCanEdit(false);
+    if (isSuccess) {
+      toast({
+        title: "Produit modifié avec succès !",
+        description: "Les modifications ont été enregistrées.",
+      });
+    }
+    if (EditIsError) {
+      toast({
+        variant: "destructive",
+        title: "Erreur lors de la modification du produit.",
+        description: "Veuillez réessayer plus tard.",
+      });
+    }
+    setOpenModel(false);
+  };
 
-  const { data: product, isLoading, isError, error } = useProduct(id);
-
+  const { data: product, isLoading, isError } = useProduct(id);
   const [canEdit, setCanEdit] = useState(false);
+
+useEffect(() => {
+   if (allowEdit) {
+     setCanEdit(true);
+     setOpenModel(true);
+   }
+} , []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -43,8 +76,9 @@ function GetProductPopUp({
   });
 
   useEffect(() => {
+    console.log(product);
     if (product) {
-      setFormData({ 
+      setFormData({
         name: product.name,
         desc: product.desc,
         price: product.price,
@@ -53,7 +87,6 @@ function GetProductPopUp({
       });
     }
   }, [product]);
-
 
   if (isLoading) return <Loader />;
   if (isError) return <div>Erreur lors du chargement du produit.</div>;
@@ -129,28 +162,26 @@ function GetProductPopUp({
                 />
               </div>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="category">Catégorie</Label>
-              {canEdit ? (
-                <Select
-                  value={formData.category}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, category: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="tables">Tables</SelectItem>
-                    <SelectItem value="chaises">Chaises</SelectItem>
-                    <SelectItem value="meubles">Meubles</SelectItem>
-                  </SelectContent>
-                </Select>
-              ) : (
-                <Input value={product.category} disabled />
-              )}
+              <select
+                id="category"
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
+                disabled={!canEdit}
+                className="w-full border rounded-md px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="" disabled>
+                  Sélectionnez une catégorie
+                </option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-2">
@@ -161,7 +192,7 @@ function GetProductPopUp({
             <div className="flex flex-col lg:flex-row justify-between gap-8">
               {!canEdit ? (
                 <div
-                  className="w-full bg-primary  p-2 text-white  rounded-xl flex items-center justify-center hover:scale-105 transition-all"
+                  className="w-full bg-primary  cursor-pointer p-2 text-white  rounded-xl flex items-center justify-center hover:scale-105 transition-all"
                   onClick={() => {
                     setCanEdit(true);
                   }}
@@ -171,18 +202,21 @@ function GetProductPopUp({
                 </div>
               ) : (
                 <div
-                  className="w-full bg-primary  p-2 text-white  rounded-xl flex items-center justify-center hover:scale-105 transition-all"
-                  // onClick={handelEdit(product.id)}
+                  className="w-full bg-green-700  cursor-pointer  p-2 text-white  rounded-xl flex items-center justify-center hover:scale-105 transition-all"
+                  onClick={() => handelEdit(product.id)}
                   // disabled={isLoading}
                 >
-                  Save changes
+                  {EditLoading ? "Modification en cours..." : "Sauvegarder "}
                 </div>
               )}
 
               <div
-                className="w-full bg-primary  p-2 text-white  rounded-xl flex items-center justify-center hover:scale-105 transition-all"
+                className={`w-full bg-red-700        p-2 text-white ${
+                  DeleteLoader
+                    ? " opacity-50 cursor-not-allowed"
+                    : "cursor-pointer opacity-100 "
+                } rounded-xl flex items-center justify-center hover:scale-105 transition-all`}
                 onClick={() => deleteProduct(id)}
-                // disabled={DeleteLoader}
               >
                 {DeleteLoader
                   ? "Supprision en cours..."

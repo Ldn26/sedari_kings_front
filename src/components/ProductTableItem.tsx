@@ -4,13 +4,33 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import GetProductPopUp from "./GetProductPopUp";
 import { useState } from "react";
+import { useDeleteProduct } from "../api/Products";
+
 
 function ProductTableItem({ product }) {
   const [openModel , setOpenModel] = useState(false);
+    const {
+      deleteProduct,
+      isLoading: DeleteLoader,
+      } = useDeleteProduct(); 
+      const [allowEdit, setAllowEdit] = useState(false);
+
+     const custumDeleteProduct = (id : number) => {
+       setOpenModel(false);
+      deleteProduct(id);
+      setAllowEdit(false);
+     }
+
   return (
     <>
       {openModel && (
-        <GetProductPopUp setOpenModel={setOpenModel} id={product.id} />
+        <GetProductPopUp
+          allowEdit={allowEdit}
+          deleteProduct={deleteProduct}
+          setOpenModel={setOpenModel}
+          id={product.id}
+          DeleteLoader={DeleteLoader}
+        />
       )}
       <button
         onClick={() => setOpenModel(true)}
@@ -44,24 +64,28 @@ function ProductTableItem({ product }) {
               </p>
 
               {/* Action Buttons */}
-              <div className="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  // onClick={() => deleteProduct(product.id)}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+              <div className="flex gap-2">
+                <div
+                  // variant="ghost"
+                  // size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  // onClick={() => editProduct(product.id)}
-                  className="text-primary hover:text-primary"
+                    custumDeleteProduct(product.id);
+                  }}
+                  className="text-destructive    hover:scale-110 transition-all bg-gray-100 flex items-center justify-center rounded-md p-1  border hover:text-destructive"
                 >
-                  <Edit3 className="h-4 w-4" />
-                </Button>
+                  <Trash2 className="h-6 w-6   " />
+                </div>
+
+                <div
+                  // variant="ghost"
+                  // size="icon"
+                  onClick={() => setAllowEdit(true)}
+                  className="text-primary    hover:scale-110 transition-all bg-gray-100 flex items-center justify-center rounded-md p-1  border hover:text-primary"
+                >
+                  <Edit3 className="h-6 w-6" />
+                </div>
               </div>
             </div>
           </CardContent>
