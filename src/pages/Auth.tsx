@@ -11,54 +11,54 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import  useUserStore  from "../../store/store.js";
+import useUserStore from "../store/store.js";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import api, { setAccessToken } from "../api/axiosIntercepter"; // our Axios instance
+import api  from "../api/axiosIntercepter"; // our Axios instance
+
 export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-
+const { SetAccessToken } = useUserStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [fullName, setFullName] = useState("");
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
-const handleSignUp = async (e: React.FormEvent) => { 
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-if(password.length < 4){
-  toast({
-    variant: "destructive",
-    title: "Erreur d'inscription",
-    description: "Le mot de passe doit contenir au moins 4 caractères.",
-  });
-  setLoading(false);
-  return;
-}
+    if (password.length < 4) {
+      toast({
+        variant: "destructive",
+        title: "Erreur d'inscription",
+        description: "Le mot de passe doit contenir au moins 4 caractères.",
+      });
+      setLoading(false);
+      return;
+    }
     try {
-     const res  =    await api.post("auth/register", {
+      const res = await api.post("auth/register", {
         email,
         password,
-        name:fullName,
+        name: fullName,
         isAdmin: false,
-      })  
-   if ( res.data) {
-     // make the toast in the buttom
-     toast({
-       title: "Inscription réussie !",
-       description: "Vous pouvez maintenant vous connecter.",
-     });
+      });
+      if (res.data) {
+        // make the toast in the buttom
+        toast({
+          title: "Inscription réussie !",
+          description: "Vous pouvez maintenant vous connecter.",
+        });
 
-     setEmail("");
-     setPassword("");
-     setFullName("");
-     setActiveTab("signin");
-     // navigate("/");
-   } 
- 
+        setEmail("");
+        setPassword("");
+        setFullName("");
+        setActiveTab("signin");
+        // navigate("/");
+      }
     } catch (error: any) {
-      console.log("error "   +  error)
+      console.log("error " + error);
       toast({
         variant: "destructive",
         title: "Erreur d'inscription",
@@ -74,21 +74,19 @@ if(password.length < 4){
     setLoading(true);
     try {
       const res = await api.post("/auth/login", { email, password });
- console.log(res.data)
+      console.log(res.data);
       // Store access token in memory
-      setAccessToken(res.data.accessToken);  
-               useUserStore.getState().setUser(res.data.user);
-
+      SetAccessToken(res.data.accessToken);
+      useUserStore.getState().setUser(res.data.user);
+      useUserStore.getState().SetAccessToken(res.data.accessToken);
       toast({
         title: "Connexion réussie !",
         description: "Bienvenue sur Maison Élégante",
       });
 
-      if(res.data.user.isAdmin){
+      if (res.data.user.isAdmin) {
         navigate("/admin"); // go to admin dashboard
-      }
-      else{
-
+      } else {
         navigate("/"); // go to home page
       }
     } catch (error: any) {

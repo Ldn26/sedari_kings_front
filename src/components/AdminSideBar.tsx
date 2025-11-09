@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { CiLogin } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
-import  useUserStore  from "../../store/store";
+import useUserStore from "../store/store";
 import api, { setAccessToken } from "../api/axiosIntercepter"; // our Axios instance
 import { useToast } from "@/hooks/use-toast";
 import { IoMdSettings } from "react-icons/io";
 
 function AdminSideBar() {
+
+  const { SetAccessToken, clearAccessToken } = useUserStore();
   const routes = [
     {
       name: "Dashboard",
@@ -51,37 +53,35 @@ function AdminSideBar() {
         </svg>
       ),
     },
-
   ];
- 
+
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const [openSide , setOpenSide] =useState(true);
+  const [openSide, setOpenSide] = useState(true);
 
-    const handleLogout = async () => {
-      try {
-        const   res =   api.post("/auth/logout");
-        console.log(res.data);
+  const handleLogout = async () => {
+    try {
+      const res = api.post("/auth/logout");
+      console.log(res.data);
       useUserStore.getState().setUser(null);
-      setAccessToken(null);
+      // SetAccessToken(null);
+      clearAccessToken()
       toast({
         title: "Déconnexion réussie",
         description: "À bientôt !",
       });
       navigate("/");
-      }
-       catch (error) {
-            toast({
-          title: "Erreur de déconnexion",
-          description: "Une erreur est survenue lors de la déconnexion.",
-          variant: "destructive",
-            });
-  console.log(error)
-       }    
-   
-    };
-  
+    } catch (error) {
+      toast({
+        title: "Erreur de déconnexion",
+        description: "Une erreur est survenue lors de la déconnexion.",
+        variant: "destructive",
+      });
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <nav className="bg-[#f7f7f8]   hidden  h-screen  lg:block   lg:min-w-[250px] border  py-6 px-4">

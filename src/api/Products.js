@@ -1,9 +1,122 @@
 import api from "../api/axiosIntercepter"
-const getProductById = async   (id)=> {
-    return await api.get(`/products/${id}`).then((res) => res.data);
-}
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+
 
 const getAllProducts = async () => {
     return await api.get('/products').then((res) => res.data);
 }
-export  {getAllProducts , getProductById};
+export  {getAllProducts  };
+
+    export const useProduct = (id) => {
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["product", id],
+    queryFn: async () => {
+      const res = await api.get(`/product/${id}`);
+      return res.data.product;
+    },
+    enabled: !!id, // prevents running when id is undefined or null
+  });
+
+  return {
+    data,
+    isLoading,
+    isError,
+    error
+  };
+};
+
+  
+ 
+
+
+
+  export const useEditProduct = (id) => {
+    const { data, isLoading, isError, error } = useQuery({
+      queryKey: ["product", id],
+      queryFn: async () => {
+        const res = await api.patch(`/product/${id}`);
+        return res.data.product;
+      },
+      enabled: !!id, // prevents running when id is undefined or null
+    });
+
+    return {
+      data,
+      isLoading,
+      isError,
+      error,
+    };
+  };
+
+
+
+
+  export const useCreateProduct  = () => {
+      const queryClient = useQueryClient();
+const mutation = useMutation({
+    mutationFn: async (productData) => {
+      const res = await api.post(`/product`, productData);
+      return res.data.product;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+    }})
+  
+    return {
+      createProduct: mutation.mutate,
+      data: mutation.data,
+      isLoading: mutation.isLoading,
+      isError: mutation.isError,
+      error: mutation.error,
+      isSuccess: mutation.isSuccess,
+    }
+  }
+
+
+
+
+ 
+ 
+ 
+ 
+
+  
+     
+
+
+
+
+
+
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (id) => {
+      const res = await api.delete(`/product/${id}`);
+      return res.data; // return data from API
+    },
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries(["products"]);
+      queryClient.invalidateQueries(["product", id]);
+    },
+  });
+
+  return {
+    deleteProduct: mutation.mutate, // function to call
+    data: mutation.data,
+    isLoading: mutation.isLoading,
+    isError: mutation.isError,
+    error: mutation.error,
+    isSuccess: mutation.isSuccess,
+  };
+};
+
+

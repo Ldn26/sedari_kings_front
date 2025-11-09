@@ -4,8 +4,8 @@ import { Button } from "./ui/button";
 // import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import  useUserStore  from "../../store/store";
-import api, { setAccessToken } from "../api/axiosIntercepter"; // our Axios instance
+import useUserStore from "../store/store";
+import api from "../api/axiosIntercepter"; // our Axios instance
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -13,7 +13,9 @@ export const Navbar = () => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+   
 
+  const { SetAccessToken  } = useUserStore();
   useEffect(() => {
     const currentUser = useUserStore.getState().user;
     setUser(currentUser);
@@ -22,41 +24,37 @@ export const Navbar = () => {
     } else {
       setIsAdmin(false);
     }
-  
   }, []);
-
 
   // const fetchCartCount = async (userId: string) => {
   //   const { data } = await supabase
   //     .from('cart_items')
   //     .select('quantity')
   //     .eq('user_id', userId);
-    
+
   //   const total = data?.reduce((sum, item) => sum + item.quantity, 0) || 0;
   //   setCartCount(total);
   // };
 
   const handleLogout = async () => {
     try {
-      const   res =   api.post("/auth/logout");
+      const res = api.post("/auth/logout");
       console.log(res.data);
-    useUserStore.getState().setUser(null);
-    setAccessToken(null);
-    toast({
-      title: "Déconnexion réussie",
-      description: "À bientôt !",
-    });
-    navigate("/");
-    }
-     catch (error) {
-          toast({
+      useUserStore.getState().setUser(null);
+      SetAccessToken(null);
+      toast({
+        title: "Déconnexion réussie",
+        description: "À bientôt !",
+      });
+      navigate("/");
+    } catch (error) {
+      toast({
         title: "Erreur de déconnexion",
         description: "Une erreur est survenue lors de la déconnexion.",
         variant: "destructive",
-          });
-console.log(error)
-     }    
- 
+      });
+      console.log(error);
+    }
   };
 
   return (
@@ -67,24 +65,36 @@ console.log(error)
             {/* <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
 Seddari Kings
             </h1> */}
-                        <img
-                          src={"/logo.svg"}
-                          alt={'Image du produit'}
-                          className="w-20 h-20 p-2 rounded-2xl"
-                        />
+            <img
+              src={"/logo.svg"}
+              alt={"Image du produit"}
+              className="w-20 h-20 p-2 rounded-2xl"
+            />
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/produits" className="text-foreground hover:text-accent transition-colors">
+            <Link
+              to="/produits"
+              className="text-foreground hover:text-accent transition-colors"
+            >
               Produits
             </Link>
-            <Link to="/produits?category=tables" className="text-foreground hover:text-accent transition-colors">
+            <Link
+              to="/produits?category=tables"
+              className="text-foreground hover:text-accent transition-colors"
+            >
               Tables
             </Link>
-            <Link to="/produits?category=chaises" className="text-foreground hover:text-accent transition-colors">
+            <Link
+              to="/produits?category=chaises"
+              className="text-foreground hover:text-accent transition-colors"
+            >
               Chaises
             </Link>
-            <Link to="/produits?category=meubles" className="text-foreground hover:text-accent transition-colors">
+            <Link
+              to="/produits?category=meubles"
+              className="text-foreground hover:text-accent transition-colors"
+            >
               Meubles
             </Link>
           </div>
@@ -115,9 +125,7 @@ Seddari Kings
                     </span>
                   )}
                 </Button>
-                <Button variant="ghost" size="icon"
-                 onClick={handleLogout}
-                 >
+                <Button variant="ghost" size="icon" onClick={handleLogout}>
                   <LogOut className="h-5 w-5" />
                 </Button>
               </>

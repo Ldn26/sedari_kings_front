@@ -8,21 +8,15 @@ import { ArrowRight, Contact } from "lucide-react";
 import heroImage from "@/assets/hero-furniture.jpg";
 import Footer from "@/components/Footer";
 import ContactUs from "@/components/ContactUs";
-import  useUserStore  from "../../store/store";
+import useUserStore from "../store/store";
 
-
-export default function Index() {  
-
-
-useEffect(() => {
-  const user = useUserStore.getState().user;
+export default function Index() {
+  useEffect(() => {
+    const user = useUserStore.getState().user;
     //  if(user.isAdmin) {
-
-     
-
-},[])
-console.log("the user from zustand ")
-   console.log(useUserStore.getState())
+  }, []);
+  console.log("the user from zustand ");
+  console.log(useUserStore.getState());
 
   // const navigate = useNavigate();
   // const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
@@ -32,7 +26,7 @@ console.log("the user from zustand ")
   //       .from('products')
   //       .select('*')
   //       .limit(3);
-      
+
   //     if (data) setFeaturedProducts(data);
   //   };
 
@@ -135,7 +129,11 @@ console.log("the user from zustand ")
                 className="bg-card items-center justify-center flex flex-col p-8 rounded-lg text-center hover:shadow-xl transition-all duration-300 animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <img  className={'w-24 h-24  founianima '} src="/tiroir.png" alt="fourn" />
+                <img
+                  className={"w-24 h-24  founianima "}
+                  src="/tiroir.png"
+                  alt="fourn"
+                />
                 <h3 className="text-2xl font-bold mb-4 text-card-foreground">
                   {feature.title}
                 </h3>

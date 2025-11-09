@@ -143,14 +143,6 @@ console.log(products)
       </div>
     );
   }
-
-
-  //     id: "1",
-  //     name: "Chaise en bois",
-  //     category: "chaises",
-  //     price: 49.99,
-  //     stock: 20,
-  //     image_url: "",
  
 
   return (
