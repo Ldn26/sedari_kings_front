@@ -56,6 +56,7 @@ api.interceptors.response.use(
         console.error("Refresh token invalid, redirecting to login...");
         // Optionally: redirect user to login page
         window.location.href = "/auth";
+        
       }
     }
 
