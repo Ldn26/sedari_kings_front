@@ -78,6 +78,7 @@ import useUserStore from "../store/store.js";
 // Create Axios instance
 const api = axios.create({
   baseURL: "http://localhost:4000/api",
+  baseURL: "https://sedarri-kings-backend.onrender.com/api",
   withCredentials: true, // sends HTTP-only cookies
 });
 
