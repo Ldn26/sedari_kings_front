@@ -2,7 +2,7 @@ import React from "react";
 
 interface StatsCardProps {
   title: string;
-  stat: number | string;
+  stat: number | string  | undefined;
   icon: React.ReactNode;
   iconBg?: string; // background color for icon circle
   iconColor?: string; // color of the icon

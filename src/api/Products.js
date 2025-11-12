@@ -1,12 +1,34 @@
 import api from "../api/axiosIntercepter"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
+ 
 
 
-const getAllProducts = async () => {
-    return await api.get('/products').then((res) => res.data);
-}
-export  {getAllProducts  };
+   
+export const useProducts = () => {
+  const {
+    data: products,
+    isLoading,
+    refetch,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await api.get("/products", {});
+      return res.data;
+    },
+  });
+
+  return {
+    products,
+    isLoading,
+    refetch,
+    isSuccess,
+  };
+};
+
+
+
 
     export const useProduct = (id) => {
   const {
@@ -33,7 +55,23 @@ export  {getAllProducts  };
 
   
  
-
+export  const useProductNumber = ()=>{
+     const { data , isLoading, refetch , isSuccess } = useQuery({
+      queryKey: ["products"],
+      queryFn: async () => {
+        const res = await api.get("/product_nbr", {});
+        return res.data;
+      },
+    }
+  
+  )
+  return  {
+ data,
+ isLoading,
+ refetch,
+ isSuccess ,   
+}
+}
 
 
 
@@ -140,3 +178,43 @@ export const useDeleteProduct = () => {
 };
 
 
+
+
+
+
+
+
+
+
+
+
+// useFilterProduct  by name and cate
+export const useFilterProduct = ({
+  name = "",
+  category = "all",
+  page = 1,
+  limit = 10,
+}) => {
+  const query = useQuery({
+    queryKey: ["products", name, category, page, limit],
+    queryFn: async () => {
+      const params = { page, limit };
+      if (name) params.name = name;
+      if (category && category !== "all") params.category = category;
+
+      const res = await api.get("/products/filter", { params });
+      return res.data; // { products, total, page, totalPages }
+    },
+    keepPreviousData: true, // useful for pagination
+  });
+
+  return {
+    products: query.data?.products || [],
+    total: query.data?.total || 0,
+    totalPages: query.data?.totalPages || 1,
+    page: query.data?.page || 1,
+    isLoading: query.isLoading,
+    refetch: query.refetch,
+    isSuccess: query.isSuccess,
+  };
+};

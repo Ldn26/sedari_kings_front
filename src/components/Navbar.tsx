@@ -13,7 +13,6 @@ export const Navbar = () => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-   
 
   const { SetAccessToken  } = useUserStore();
   useEffect(() => {
@@ -58,7 +57,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 z-50 w-full   h-[80px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
@@ -83,19 +82,19 @@ Seddari Kings
               to="/produits?category=tables"
               className="text-foreground hover:text-accent transition-colors"
             >
-              Tables
+              
             </Link>
             <Link
               to="/produits?category=chaises"
               className="text-foreground hover:text-accent transition-colors"
             >
-              Chaises
+              À propos
             </Link>
             <Link
               to="/produits?category=meubles"
               className="text-foreground hover:text-accent transition-colors"
             >
-              Meubles
+              Contact
             </Link>
           </div>
 

@@ -1,74 +1,124 @@
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@radix-ui/react-select";
-import { Select } from "./ui/select";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useCreateProduct } from "../api/Products";
-import categories  from "../data/categories";
+import categories from "../data/categories";
 import { useToast } from "@/hooks/use-toast";
-function AddProductPopUp({setOpenModel} : {setOpenModel: React.Dispatch<React.SetStateAction<boolean>>}) {
+
+function AddProductPopUp({
+  setOpenModel,
+}: {
+  setOpenModel: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [loading, setLoading] = useState(false);
-const { createProduct, isLoading, isError, data, error, isSuccess } = useCreateProduct();
-const { toast } = useToast();
+  const { createProduct, isLoading, isError, data, error, isSuccess } =
+    useCreateProduct();
+  const { toast } = useToast();
 
-
-const [formData, setFormData] = useState({
-    name: "",
-    desc: "",  
-    price: "",
+  const [formData, setFormData] = useState({
+    name: "youc",
+    desc: "ww",
+    price: "123",
     category: "tables",
-    quantity: "",
-    image_url: "",
+    quantity: "123",
+    images: [] as string[], // now an array
   });
-  
-  
+  // Save multiple images
+  const saveImagesToFormData = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (!files) return;
 
+    const newImages: string[] = [];
 
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
 
+      await new Promise<void>((resolve) => {
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
 
- const handelAddProduct = () => {
-   if (
-     formData.name == "" ||
-     formData.price == undefined ||
-     formData.category == ""  ||
-      formData.quantity == ""
-   )  return toast({ variant: "destructive", title: "tous les champs obligatoires doivent être remplis", description: "Veuillez remplir tous les champs obligatoires.",
-     });
-   
+          // Resize logic
+          const maxWidth = 800;
+          const maxHeight = 800;
+          let width = img.width;
+          let height = img.height;
 
-     createProduct({
-       name: formData.name,
-       desc: formData.desc,
-       price: parseFloat(formData.price),
-       category: formData.category,
-       quantity: parseInt(formData.quantity, 10),
-       image_url: formData.image_url,
-     });
-console.log("isSuccess")
-console.log(isSuccess)
-// make the toast green 
-toast({
-  variant: "default",
-  title: "Produit ajouté avec succès !",
-  description: "Le produit a été ajouté à l'inventaire.",
-});  
-      setOpenModel(false);
+          if (width > height) {
+            if (width > maxWidth) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = (width * maxHeight) / height;
+              height = maxHeight;
+            }
+          }
 
+          canvas.width = width;
+          canvas.height = height;
+          ctx?.drawImage(img, 0, 0, width, height);
 
-      // setOpenModel(false);
+          // Convert to WebP & remove metadata
+          const optimizedImage = canvas.toDataURL("image/webp", 0.7);
 
+          console.log(
+            "Optimized image size:",
+            (optimizedImage.length / 1024).toFixed(2),
+            "KB"
+          );
 
- };     
+          newImages.push(optimizedImage);
+          resolve();
+        };
+      });
+    }
 
+    setFormData({ ...formData, images: [...formData.images, ...newImages] });
+  };
+
+  // Handle Add Product
+  const handelAddProduct = () => { 
+    console.log("the fornData ");
+    console.log(formData);
+    if (
+      !formData.name ||
+      !formData.price ||
+      !formData.category ||
+      !formData.quantity
+    )
+      return toast({
+        variant: "destructive",
+        title: "Tous les champs obligatoires doivent être remplis",
+        description: "Veuillez remplir tous les champs obligatoires.",
+      });
+     
+
+    createProduct({
+      name: formData.name,
+      desc: formData.desc,
+      price: parseFloat(formData.price),
+      category: formData.category,
+      quantity: parseInt(formData.quantity, 10),
+      imageUrl: formData.images, // send the array
+    });
+
+    toast({
+      variant: "default",
+      title: "Produit ajouté avec succès !",
+      description: "Le produit a été ajouté à l'inventaire.",
+    });
+
+    setOpenModel(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -76,7 +126,7 @@ toast({
       <div className="absolute inset-0 bg-black/50"></div>
 
       {/* Centered Card */}
-      <Card className="relative  animate-fade-in-up w-full max-w-md mx-2">
+      <Card className="relative animate-fade-in-up w-full max-w-md mx-2">
         <button
           className="flex absolute right-4 top-2 hover:scale-105 transition-all items-center justify-center"
           onClick={() => setOpenModel(false)}
@@ -141,7 +191,6 @@ toast({
               <Label htmlFor="category">Catégorie</Label>
               <select
                 id="category"
-                //  value={formData.category}
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
@@ -159,18 +208,37 @@ toast({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image_url">URL de l'image</Label>
-              <Input placeholder="https://..." />
+              <Label htmlFor="image">Images du produit</Label>
+              <input
+                type="file"
+                id="images"
+                accept="image/*"
+                capture="environment"
+                multiple
+                onChange={(e) => saveImagesToFormData(e)}
+                className="w-full border rounded-md px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {formData.images.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {formData.images.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt={`Preview ${idx}`}
+                      className="w-24 h-24 object-cover rounded"
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             <div
               onClick={handelAddProduct}
-              className={`w-full flex items-center justify-center p-2 rounded-xl bg-primary  ${
+              className={`w-full flex items-center justify-center p-2 rounded-xl bg-primary ${
                 isLoading
                   ? "opacity-50 cursor-not-allowed"
                   : "opacity-100 cursor-pointer"
-              }  text-white `}
-              // disabled={isLoading}
+              } text-white`}
             >
               {isLoading ? "Ajout en cours..." : "Ajouter le Produit"}
             </div>

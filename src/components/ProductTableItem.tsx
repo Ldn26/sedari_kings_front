@@ -42,7 +42,7 @@ function ProductTableItem({ product }) {
             {/* Image */}
             <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
               <img
-                src={product.image_url || "/placeholder.svg"}
+                src={product.imageUrl[0] || "/placeholder.svg"}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />

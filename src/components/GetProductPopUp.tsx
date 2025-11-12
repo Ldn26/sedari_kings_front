@@ -59,6 +59,68 @@ function GetProductPopUp({
 
   const { data: product, isLoading, isError } = useProduct(id);
   const [canEdit, setCanEdit] = useState(false);
+  
+    const saveImagesToFormData = async (
+      e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      const files = e.target.files;
+      if (!files) return;
+  
+      const newImages: string[] = [];
+  
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+  
+        await new Promise<void>((resolve) => {
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+  
+            // Resize logic
+            const maxWidth = 800;
+            const maxHeight = 800;
+            let width = img.width;
+            let height = img.height;
+  
+            if (width > height) {
+              if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+              }
+            } else {
+              if (height > maxHeight) {
+                width = (width * maxHeight) / height;
+                height = maxHeight;
+              }
+            }
+  
+            canvas.width = width;
+            canvas.height = height;
+            ctx?.drawImage(img, 0, 0, width, height);
+  
+            // Convert to WebP & remove metadata
+            const optimizedImage = canvas.toDataURL("image/webp", 0.7);
+  
+            console.log(
+              "Optimized image size:",
+              (optimizedImage.length / 1024).toFixed(2),
+              "KB"
+            );
+  
+            newImages.push(optimizedImage);
+            resolve();
+          };
+        });
+      }
+  
+      setFormData({
+        ...formData,
+        imageUrl: [...formData.imageUrl, ...newImages],
+      });
+    };
+
 
 useEffect(() => {
    if (allowEdit) {
@@ -73,6 +135,7 @@ useEffect(() => {
     price: 0,
     quantity: 0,
     category: "",
+    imageUrl: [] as string[],
   });
 
   useEffect(() => {
@@ -84,6 +147,7 @@ useEffect(() => {
         price: product.price,
         quantity: product.quantity,
         category: product.category,
+        imageUrl: product.imageUrl,
       });
     }
   }, [product]);
@@ -162,6 +226,7 @@ useEffect(() => {
                 />
               </div>
             </div>
+            {/* cate */}
             <div className="space-y-2">
               <Label htmlFor="category">Catégorie</Label>
               <select
@@ -185,8 +250,62 @@ useEffect(() => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image_url">URL de l'image</Label>
-              <Input placeholder="https://..." />
+              <Label htmlFor="image">Images du produit</Label>
+
+              {canEdit && (
+                <div className="relative ">
+                  <input
+                    type="file"
+                    id="images"
+                    accept="image/*"
+                    capture="environment"
+                    multiple
+                    onChange={(e) => saveImagesToFormData(e)}
+                    className="absolute inset-0  w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="w-full border  rounded-md px-3 py-2 bg-white text-sm shadow-sm flex items-center justify-center hover:bg-blue-50 transition-all cursor-pointer">
+                    <span className="text-gray-700 font-bold ">Choisir des images</span>
+                  </div>
+                </div>
+              )}
+
+              {formData.imageUrl.length > 0 && (
+                <div className="mt-2">
+                  <div
+                    className="flex overflow-x-scroll gap-2 scroll-smooth snap-x snap-mandatory"
+                    style={{ scrollbarWidth: "thin" }}
+                  >
+                    {formData.imageUrl.map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="relative w-[200px] h-[200px] flex-shrink-0 snap-start"
+                      >
+                        <img
+                          src={img}
+                          alt={`Preview ${idx}`}
+                          className="w-full h-full object-cover rounded"
+                        />
+                        {canEdit && (
+                          <button
+                            type="button"
+                            className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-800"
+                            onClick={() => {
+                              setFormData({
+                                ...formData,
+                                imageUrl: formData.imageUrl.filter(
+                                  (_, i) => i !== idx
+                                ),
+                              });
+                            }}
+                          >
+                            &times;
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col lg:flex-row justify-between gap-8">
