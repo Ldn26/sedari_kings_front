@@ -23,7 +23,7 @@ export default function Cart() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
   //   fetchCartItems();
@@ -91,16 +91,16 @@ export default function Cart() {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container mx-auto px-4 py-20 text-center">
-          <p className="text-xl text-muted-foreground">Chargement...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-background">
+  //       <Navbar />
+  //       <div className="container mx-auto px-4 py-20 text-center">
+  //         <p className="text-xl text-muted-foreground">Chargement...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-background">
@@ -199,7 +199,7 @@ export default function Cart() {
                   </div>
                   
                   <Button className="w-full" size="lg">
-                    Procéder au paiement
+
                   </Button>
                   
                   <Button 
