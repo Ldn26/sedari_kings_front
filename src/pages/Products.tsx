@@ -37,11 +37,7 @@ const categories = [
 ];
  
 
-  console.log(totalPages)
 
-
-
- console.log(products);
 
 
   return (

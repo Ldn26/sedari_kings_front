@@ -5,9 +5,9 @@ type ProductType = {
   category: string;
   desc: string; // match API field
   quantity: string | number;
-  createdAt: string;
-  imageUrl: string | null;
-  updatedAt: string;
+  createdAt?: string;
+  imageUrl: string[]  | null;
+  updatedAt?: string;
   height?: number | null;
   width?: number | null;
 };

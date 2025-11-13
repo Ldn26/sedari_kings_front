@@ -58,7 +58,7 @@ export default function ContactUs() {
           <div className="h-1 w-20 bg-gradient-to-r  text-[#7B542F] mx-auto mb-6"></div>
         </motion.div>
 
-        <div className="flex items-center justify-center  gap-12 max-w-6xl mx-auto">
+        <div className="flex items-center justify-center  flex-col-reverse lg:flex-row  gap-12 max-w-6xl mx-auto">
           <motion.div
             variants={containerVariants}
             initial="hidden"

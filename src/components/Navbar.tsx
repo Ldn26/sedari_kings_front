@@ -57,9 +57,9 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full   h-[80px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+    <nav className="sticky top-0 z-50 w-full py-1   h-[80px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto  px-4">
+        <div className="flex h-16 font-medium items-center text-xl justify-between">
           <Link to="/" className="flex items-center space-x-2">
             {/* <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
 Seddari Kings
@@ -67,7 +67,7 @@ Seddari Kings
             <img
               src={"/logo.svg"}
               alt={"Image du produit"}
-              className="w-20 h-20 p-2 rounded-2xl"
+              className="w-24 h-24 p-2 rounded-2xl"
             />
           </Link>
 
@@ -81,9 +81,7 @@ Seddari Kings
             <Link
               to="/produits?category=tables"
               className="text-foreground hover:text-accent transition-colors"
-            >
-              
-            </Link>
+            ></Link>
             <Link
               to="/produits?category=chaises"
               className="text-foreground hover:text-accent transition-colors"
@@ -130,8 +128,8 @@ Seddari Kings
               </>
             ) : (
               <Button onClick={() => navigate("/auth")} variant="default">
-                <User className="h-4 w-4 mr-2" />
-                Connexion
+                <User className="h-6 w-6 mr-2" />
+                <p className="text-lg"> Connexion</p>
               </Button>
             )}
           </div>

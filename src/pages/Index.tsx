@@ -8,40 +8,44 @@ import heroImage from "@/assets/hero-furniture.jpg";
 import Footer from "@/components/Footer";
 import ContactUs from "@/components/ContactUs";
 import useUserStore from "../store/store";
+import { Autoplay } from "swiper/modules";
+import { useFilterProduct } from "../api/products";
+import ProductType from "types/allTypes"; // import your type
+import { Swiper, SwiperSlide  } from "swiper/react";
+import "swiper/css";
+import APropos from "@/components/APropos";
+
 
 export default function Index() {
   const navigate = useNavigate();
 
-  // Example featured products
-  const featuredProducts = [
-    {
-      id: 1,
-      name: "Canapé Confort",
-      price: 899,
-      desc: "Canapé luxueux en cuir véritable pour votre salon.",
-      imageUrl: ["/products/canape.jpg"],
-      quantity: 5,
-      category: "Salon",
-    },
-    {
-      id: 2,
-      name: "Table à Manger Élégante",
-      price: 499,
-      desc: "Table moderne en bois massif pour vos repas en famille.",
-      imageUrl: ["/products/table.jpg"],
-      quantity: 3,
-      category: "Salle à manger",
-    },
-    {
-      id: 3,
-      name: "Chaise Design",
-      price: 129,
-      desc: "Chaise ergonomique et design pour bureau ou salon.",
-      imageUrl: ["/products/chaise.jpg"],
-      quantity: 10,
-      category: "Bureau",
-    },
-  ];
+
+
+   const { products :featuredProducts, totalPages, isLoading, isSuccess } = useFilterProduct({
+     search: "" ,
+     category:  "all"  , 
+      page: 1,
+     limit: 12,
+   });
+
+      const {
+        products: featuredProducts2,
+        totalPages2,
+        isLoading2,
+        isSuccess2,
+      } = useFilterProduct({
+        search: "",
+        category: "all",
+        page: 2,
+        limit: 12,
+      });
+ 
+   console.log("feature Product")
+
+  //  console.log(products)
+  console.log(featuredProducts)
+console.log("feature Product2")
+  console.log(featuredProducts2)
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -76,6 +80,11 @@ export default function Index() {
         </div>
       </section>
 
+
+
+
+ <APropos />
+
       {/* Featured Products Section */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
@@ -86,17 +95,79 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {featuredProducts.map((product, index) => (
-              <div
-                key={product.id}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.2}s` }}
+          {isLoading ? (
+            <p className="text-center text-muted-foreground">
+              Chargement des produits...
+            </p>
+          ) : isSuccess && featuredProducts.length === 0 ? (
+            <p className="text-center text-muted-foreground">
+              Aucun produit trouvé.
+            </p>
+          ) : (
+      
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={20}
+                loop={true}
+                modules={[Autoplay]}
+                autoplay={{
+                  delay: 500,
+                  disableOnInteraction: false,
+                }}
+                breakpoints={{
+                  640: { slidesPerView: 2 },
+                  768: { slidesPerView: 3 },
+                  1024: { slidesPerView: 4 },
+                }}
+                // onSlideChange={() => console.log("slide change")}
+                // onSwiper={(swiper) => console.log(swiper)}
               >
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
+                {featuredProducts.map((product: ProductType) => (
+                  <SwiperSlide key={product.id}>
+                    <ProductCard key={product.id} product={product} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            
+         
+          )}
+{/* secend Swipper */}
+          {isLoading2 ? (
+            <p className="text-center text-muted-foreground">
+              Chargement des produits...
+            </p>
+          ) : isSuccess2 && featuredProducts2.length === 0 ? (
+            <p className="text-center text-muted-foreground">
+              Aucun produit trouvé.
+            </p>
+          ) : (
+         
+              <Swiper
+                slidesPerView={1}
+                  modules={[Autoplay]} 
+                spaceBetween={20}
+                loop={true}
+                autoplay={{
+                  delay: 500,
+                  disableOnInteraction: false,
+                }}
+                breakpoints={{
+                  640: { slidesPerView: 2 },
+                  768: { slidesPerView: 3 },
+                  1024: { slidesPerView: 4 },
+                }}
+                // onSlideChange={() => console.log("slide change")}
+                // onSwiper={(swiper) => console.log(swiper)}
+              >
+                {featuredProducts2.map((product: ProductType) => (
+                  <SwiperSlide key={product.id}>
+                    <ProductCard key={product.id} product={product} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+         
+        
+          )}
 
           <div className="text-center mt-12 animate-fade-in-up">
             <Button
@@ -130,19 +201,19 @@ export default function Index() {
                 title: "Qualité Artisanale",
                 description:
                   "Chaque pièce est fabriquée à la main par nos artisans experts.",
-                icon: "/tiroir.png",
+                icon: "/el1.png",
               },
               {
                 title: "Design Unique",
                 description:
                   "Des créations originales qui reflètent votre personnalité.",
-                icon: "/design.png",
+                icon: "/el2.png",
               },
               {
                 title: "Matériaux Nobles",
                 description:
                   "Sélection rigoureuse des meilleurs bois et matériaux.",
-                icon: "/materiaux.png",
+                icon: "/el3.png",
               },
             ].map((feature, index) => (
               <div

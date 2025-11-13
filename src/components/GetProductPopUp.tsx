@@ -116,8 +116,10 @@ function GetProductPopUp({
       }
   
       setFormData({
+        
         ...formData,
-        imageUrl: [...formData.imageUrl, ...newImages],
+        imageUrl: [...(formData.imageUrl || []), ...newImages],
+        // imageUrl: [...formData.imageUrl, ...newImages],
       });
     };
 
@@ -264,12 +266,14 @@ useEffect(() => {
                     className="absolute inset-0  w-full h-full opacity-0 cursor-pointer"
                   />
                   <div className="w-full border  rounded-md px-3 py-2 bg-white text-sm shadow-sm flex items-center justify-center hover:bg-blue-50 transition-all cursor-pointer">
-                    <span className="text-gray-700 font-bold ">Choisir des images</span>
+                    <span className="text-gray-700 font-bold ">
+                      Choisir des images
+                    </span>
                   </div>
                 </div>
               )}
 
-              {formData.imageUrl.length > 0 && (
+              {formData.imageUrl && formData.imageUrl.length > 0 && (
                 <div className="mt-2">
                   <div
                     className="flex overflow-x-scroll gap-2 scroll-smooth snap-x snap-mandatory"
@@ -281,7 +285,7 @@ useEffect(() => {
                         className="relative w-[200px] h-[200px] flex-shrink-0 snap-start"
                       >
                         <img
-                          src={img}
+                          src={img ? img : "/placeholder.svg"}
                           alt={`Preview ${idx}`}
                           className="w-full h-full object-cover rounded"
                         />
