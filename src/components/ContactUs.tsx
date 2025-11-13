@@ -1,16 +1,14 @@
 import type React from "react";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, } from "react";
 
-import { Mail, MapPin, Phone, Send } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify";
+import { Mail, MapPin, Phone } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ContactUs() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -39,7 +37,7 @@ export default function ContactUs() {
     >
       <div className="absolute top-20 left-0 w-full h-40 pointer-events-none opacity-10">
         <div className="w-full h-full flex items-center justify-center">
-          <div className="text-8xl font-bold text-orange-500/20 transform -rotate-12">
+          <div className="lg:text-8xl text-5xl font-bold  transform text-primary -rotate-12">
             Contact nous
           </div>
         </div>
@@ -136,25 +134,15 @@ export default function ContactUs() {
             className=" max-w-2xl mx-auto"
           >
             <img
-              src="/sec.jpg"
-              alt="section images "
-              className="rounded-2xl "
+              src="/sec5.jpg"
+              alt="section  images "
+              className="rounded-xl w-[650px]  h-[400px]"
             />
           </motion.div>
         </div>
+
       </div>
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme="dark"
-      />
+
     </section>
   );
 }

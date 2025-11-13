@@ -17,7 +17,7 @@ export default function Products() {
     limit: 12,
   });
 
-
+console.log(selectedCategory)
 
   
 const categories = [
@@ -36,6 +36,9 @@ const categories = [
   { value: "autre", label: "Autre" },
 ];
  
+
+
+
 
 
 
@@ -84,8 +87,6 @@ const categories = [
           />
         </div>
 
-        {/* Productsssss */}
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center gap-4 mb-8">
             <Button
@@ -112,19 +113,20 @@ const categories = [
             ))}
         </div>
 
-        {/* No Products */}
-        {!isLoading && isSuccess && products.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-xl text-muted-foreground">
-              Aucun produit trouvé
-            </p>
-          </div>
-        )}
+
+  {isLoading && (
+        <div className="text-center py-20">
+          <p className="text-2xl  text-black text-muted-foreground">
+            Chargement des produits...
+          </p>
+        </div>
+      ) }
+
 
         {/* No Products */}
-        {!isLoading && isSuccess && products.length === 0 && (
+        {!isLoading  && products.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-xl text-muted-foreground">
+            <p className="text-2xl  text-black text-muted-foreground">
               Aucun produit trouvé
             </p>
           </div>

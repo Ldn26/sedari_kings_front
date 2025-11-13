@@ -65,7 +65,6 @@ function AdminSideBar() {
       const res = api.post("/auth/logout");
       console.log(res.data);
       useUserStore.getState().setUser(null);
-      // SetAccessToken(null);
       clearAccessToken()
       toast({
         title: "Déconnexion réussie",

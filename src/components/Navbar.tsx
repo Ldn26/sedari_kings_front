@@ -10,20 +10,12 @@ import api from "../api/axiosIntercepter"; // our Axios instance
 export const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-
   const { SetAccessToken  } = useUserStore();
-  useEffect(() => {
-    const currentUser = useUserStore.getState().user;
-    setUser(currentUser);
-    if (currentUser && currentUser.isAdmin === "admin") {
-      setIsAdmin(true);
-    } else {
-      setIsAdmin(false);
-    }
-  }, []);
+ const user = useUserStore((state) => state.user);
+ console.log(user)
+
 
   // const fetchCartCount = async (userId: string) => {
   //   const { data } = await supabase
@@ -57,82 +49,80 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full py-1   h-[80px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto  px-4">
-        <div className="flex h-16 font-medium items-center text-xl justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            {/* <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-Seddari Kings
-            </h1> */}
-            <img
-              src={"/logo.svg"}
-              alt={"Image du produit"}
-              className="w-24 h-24 p-2 rounded-2xl"
-            />
-          </Link>
+    <nav className="sticky top-0 z-[100] w-full  mx-auto  container  h-[100px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex  font-medium items-center text-xl justify-between">
+        <Link to="/" className="flex items-center space-x-2">
+          <img
+            src={"/logo.svg"}
+            alt={"Image du produit"}
+            className="w-24 h-24 p-2 rounded-2xl"
+          />
+        </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/produits"
-              className="text-foreground hover:text-accent transition-colors"
-            >
-              Produits
-            </Link>
-            <Link
-              to="/produits?category=tables"
-              className="text-foreground hover:text-accent transition-colors"
-            ></Link>
-            <Link
-              to="/produits?category=chaises"
-              className="text-foreground hover:text-accent transition-colors"
-            >
-              À propos
-            </Link>
-            <Link
-              to="/produits?category=meubles"
-              className="text-foreground hover:text-accent transition-colors"
-            >
-              Contact
-            </Link>
-          </div>
+        <div className="hidden md:flex items-center space-x-8">
+          <a
+            href={!user ? "/#products" : "/produits"}
+            className="text-foreground hover:text-accent transition-colors"
+          >
+            Produits
+          </a>
 
-          <div className="flex items-center space-x-4">
-            {user ? (
-              <>
-                {isAdmin && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => navigate("/admin")}
-                    className="relative"
-                  >
-                    <LayoutDashboard className="h-5 w-5" />
-                  </Button>
-                )}
+          <a
+            href="/#about"
+            className="text-foreground hover:text-accent transition-colors"
+          >
+            À propos
+          </a>
+          <a
+            href="/#contact"
+            className="text-foreground hover:text-accent transition-colors"
+          >
+            Contact
+          </a>
+          <a
+            href="/#whay"
+            className="text-foreground hover:text-accent transition-colors"
+          >
+            Pourquoi nous
+          </a>
+        </div>
+
+        <div className="flex items-center space-x-4">
+          {user ? (
+            <>
+              {isAdmin && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => navigate("/panier")}
+                  onClick={() => navigate("/admin")}
                   className="relative"
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  {cartCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {cartCount}
-                    </span>
-                  )}
+                  <LayoutDashboard className="h-5 w-5" />
                 </Button>
-                <Button variant="ghost" size="icon" onClick={handleLogout}>
-                  <LogOut className="h-5 w-5" />
-                </Button>
-              </>
-            ) : (
-              <Button onClick={() => navigate("/auth")} variant="default">
-                <User className="h-6 w-6 mr-2" />
-                <p className="text-lg"> Connexion</p>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("/panier")}
+                className="relative"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
               </Button>
-            )}
-          </div>
+              <Button variant="ghost" size="icon" onClick={handleLogout}>
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => navigate("/auth")} variant="default">
+              <User className="h-6 w-6 mr-2" />
+              <p className="text-lg"> Connexion</p>
+            </Button>
+          )}
         </div>
       </div>
     </nav>

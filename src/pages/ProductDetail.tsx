@@ -270,7 +270,6 @@ export default function ProductDetail() {
       <Navbar />
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          {/*  ggggallery */}
           <div className="animate-fade-in w-full rounded-lg bg-muted">
             <ImageGallery
               items={
@@ -288,9 +287,9 @@ export default function ProductDetail() {
               additionalClass="rounded-lg"
               renderItem={(item) => (
                 <img
-                  src={item.original}
+                  src={item.original }
                   alt={product.name}
-                  style={{ width: "100%", height: "auto" }} 
+                  style={{ width: "100%", height: "auto" }}
                   className="rounded-lg max-h-[80vh] md:max-h-[90vh] object-contain"
                 />
               )}
