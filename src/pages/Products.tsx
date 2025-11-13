@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { useFilterProduct } from "../api/products";
+import { useFilterProduct } from "../api/Products"
 import ProductType from "types/allTypes";
 
 export default function Products() {

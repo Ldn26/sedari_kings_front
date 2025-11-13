@@ -1,38 +1,40 @@
-import React from 'react'
+import React from "react";
 import ProductType from "types/allTypes"; // import your type
 import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide  } from "swiper/react";
-import { useFilterProduct } from "../api/products";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { useFilterProduct } from "../api/Products";
 import "swiper/css";
 import { ProductCard } from "@/components/ProductCard";
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 function FeaturedProducts() {
   const navigate = useNavigate();
 
+  const {
+    products: featuredProducts,
+    isLoading,
+    isSuccess,
+  } = useFilterProduct({
+    search: "",
+    category: "all",
+    page: 1,
+    limit: 12,
+  });
 
-      const { products :featuredProducts, isLoading, isSuccess } = useFilterProduct({
-         search: "" ,
-         category:  "all"  , 
-          page: 1,
-         limit: 12,
-       });
-    
-          const {
-            products: featuredProducts2,
-            isLoading2,
-            isSuccess2,
-          } = useFilterProduct({
-            search: "",
-            category: "all",
-            page: 2,
-            limit: 12,
-          });
-     
- 
+  const {
+    products: featuredProducts2,
+    isLoading2,
+    isSuccess2,
+  } = useFilterProduct({
+    search: "",
+    category: "all",
+    page: 2,
+    limit: 12,
+  });
+
   return (
-    <section id='products' className="py-20 relative z-50 bg-background">
+    <section id="products" className="py-20 relative z-50 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center   animate-fade-in">
           <div className="text-primary  z-[100] top-20 left-0 w-full h-40 pointer-events-none opacity-10">
@@ -42,7 +44,6 @@ function FeaturedProducts() {
               </div>
             </div>
           </div>
- 
         </div>
 
         {isLoading ? (
@@ -128,4 +129,4 @@ function FeaturedProducts() {
   );
 }
 
-export default FeaturedProducts
+export default FeaturedProducts;
