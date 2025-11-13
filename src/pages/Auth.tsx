@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AxiosError } from "axios";
+
 import {
   Card,
   CardContent,
@@ -57,13 +59,16 @@ const { SetAccessToken } = useUserStore();
         setActiveTab("signin");
         // navigate("/");
       }
-    } catch (error: any) {
-      console.log("error " + error);
-      toast({
-        variant: "destructive",
-        title: "Erreur d'inscription",
-        description: error.response?.data?.message || "Erreur inconnue",
-      });
+    } catch (error: unknown) {
+ 
+               const err = error as AxiosError<{ message: string }>;
+
+               toast({
+                 variant: "destructive",
+                 title: "Erreur de inscription",
+                 description: err.response?.data?.message || "Erreur inconnue",
+               });
+
     } finally {
       setLoading(false);
     }
@@ -89,12 +94,16 @@ const { SetAccessToken } = useUserStore();
       } else {
         navigate("/"); // go to home page
       }
-    } catch (error :any) {
-      toast({
-        variant: "destructive",
-        title: "Erreur de connexion",
-        description: error.response?.data?.message || "Erreur inconnue",
-      });
+    } catch (error :unknown) {
+          const err = error as AxiosError<{ message: string }>;
+
+          toast({
+            variant: "destructive",
+            title: "Erreur de connexion",
+            description: err.response?.data?.message || "Erreur inconnue",
+          });
+
+
     } finally {
       setLoading(false);
     }

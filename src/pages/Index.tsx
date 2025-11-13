@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import ContactUs from "@/components/ContactUs";
 import APropos from "@/components/APropos";
 import FeaturedProducts from "@/components/FeaturedProducts";
-import WhayChooseUs from "@/components/whayChooseUs";
+import WhayChooseUs from "@/components/WhayChooseUs";
 import HeroSection from "@/components/HeroSection";
 export default function Index() {
 
@@ -18,7 +18,7 @@ export default function Index() {
 <HeroSection />
  <APropos />
 <FeaturedProducts />
-   
+  
 <WhayChooseUs />
       <ContactUs />
       <Footer />
