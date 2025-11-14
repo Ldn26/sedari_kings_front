@@ -38,7 +38,9 @@ export const useProduct = (id?: number) => {
 };
 
 export const useProductNumber = () => {
-  const query = useQuery<{ count: number }>({
+  const query = useQuery<{
+    productscount: number; count: number 
+}>({
     queryKey: ["productNumber"],
     queryFn: async () => {
       const res = await api.get("/product_nbr");
@@ -51,6 +53,7 @@ export const useProductNumber = () => {
     isLoading: query.isLoading,
     refetch: query.refetch,
     isSuccess: query.isSuccess,
+    isError: query.isError,
   };
 };
 

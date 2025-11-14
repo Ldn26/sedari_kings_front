@@ -15,7 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import useUserStore from "../store/store.js";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import api  from "../api/axiosIntercepter"; // our Axios instance
+import api  from "../api/axiosIntercepter.js"; // our Axios instance
 import { Navbar } from "@/components/Navbar.js";
 
 export default function Auth() {

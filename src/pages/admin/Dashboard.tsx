@@ -1,7 +1,7 @@
 import StatsCard from "@/components/StatsCard";
 import { ShoppingBag, User, Package } from "lucide-react";
 import { useProductNumber } from "../../api/Products";
-import { useUsersNumber } from "../../api/Users";
+import { useUsersNumber } from "../../api/users";
 function Dashboard() {
   const {
     data: productnbr,
@@ -11,7 +11,7 @@ function Dashboard() {
   const {
     data: usersnbr,
     isLoading: userNbrLoader,
-    isError:isErrorUsers,
+    isError: isErrorUsers,
   } = useUsersNumber(); // Use your data fetching hook here
 
   console.log(productnbr);
