@@ -39,10 +39,10 @@ function OrderTableItem({ order }) {
       <button onClick={() => setOpenModel(true)} className="w-full">
         <Card className="w-full hover:brightness-95 transition-all animate-fade-in-up rounded-xl shadow-sm border border-[#d7cfc8]">
           <CardContent className="flex items-center justify-between p-3 gap-2">
-            {/* Client */}
-            <div className="flex-1 text-left text-xs sm:text-md sm:w-1/5 font-semibold">
+            <div className="flex-1 text-left text-xs sm:text-md sm:w-1/5    font-semibold">
               {order.User.name}
             </div>
+        
 
             {/* Date */}
             <div className="flex-1 hidden sm:flex justify-center items-center text-xs sm:text-md sm:w-1/5">

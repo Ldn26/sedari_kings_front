@@ -3,8 +3,8 @@ import useUserStore from "../store/store.js";
 
 // Create Axios instance
 const api = axios.create({
-  // baseURL: "http://localhost:4000/api",
-  baseURL: "https://sedarri-kings-backend.onrender.com/api",
+  baseURL: "http://localhost:4000/api",
+  // baseURL: "https://sedarri-kings-backend.onrender.com/api",
   withCredentials: true, // sends HTTP-only cookies
 });
 
@@ -55,9 +55,9 @@ api.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (err) {
-        console.log("the error  in axios intercepter ");
-        console.error(err);
-        console.error("Refresh token invalid, redirecting to login...");
+        // console.log("the error  in axios intercepter ");
+        // console.error(err);
+        // console.error("Refresh token invalid, redirecting to login...");
         // Optionally: redirect user to login page
         // window.location.href = "/auth";
 
