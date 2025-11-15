@@ -55,7 +55,7 @@ function ProductTableItem({ product }) {
 
             {/* Product Details */}
             <div className="flex flex-1  flex-row sm:items-center sm:justify-between gap-2 w-full">
-              <h3 className="flex-1 sm:w-1/5 font-semibold text-sm sm:text-base      max-w-[110px]  xs:maw-w-[130px]   sm:max-w-[140px]  truncate overflow-hidden whitespace-nowrap">
+              <h3 className="flex-1 sm:w-1/5 font-semibold text-sm sm:text-base      max-w-[130px]  xs:maw-w-[150px]   sm:max-w-[300px]  truncate overflow-hidden whitespace-nowrap">
                 {product.name}
               </h3>
 

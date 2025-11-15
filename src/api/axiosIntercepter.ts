@@ -3,8 +3,8 @@ import useUserStore from "../store/store.js";
 
 // Create Axios instance
 const api = axios.create({
-  baseURL: "http://localhost:4000/api",
-  // baseURL: "https://sedarri-kings-backend.onrender.com/api",
+  // baseURL: "http://localhost:4000/api",
+  baseURL: "https://sedarri-kings-backend.onrender.com/api",
   withCredentials: true, // sends HTTP-only cookies
 });
 
@@ -39,8 +39,8 @@ api.interceptors.response.use(
       try {
         // Call refresh endpoint (refresh token in HTTP-only cookie)
         const res = await axios.post(
-          // "https://sedarri-kings-backend.onrender.com/api/auth/refreshToken",
-          "http://localhost:4000/api/auth/refreshToken",
+          "https://sedarri-kings-backend.onrender.com/api/auth/refreshToken",
+          // "http://localhost:4000/api/auth/refreshToken",
           {},
           { withCredentials: true } // must be inside the request config
         );
