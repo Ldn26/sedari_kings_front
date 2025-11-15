@@ -17,6 +17,9 @@ import ManageProducts from "./pages/admin/ManageProducts";
 import Notifications from "./pages/admin/Notifications";
 import Dashboard from "./pages/admin/Dashboard";
 import Users from "./pages/admin/Users";
+import Order from "./pages/Order";
+import UserLayout from "./components/UserLayout";
+import MangeOrders from "./pages/admin/MangeOrders";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -29,17 +32,34 @@ const App = () => (
         <Routes>
           <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<Index />} />
-
-          <Route
+          {/* <Route
             path="/produits"
             element={
               <ProtectedRoute>
                 <Products />
               </ProtectedRoute>
             }
-          />
+          /> */}
+
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute adminOnly={false}>
+                <UserLayout />
+              </ProtectedRoute>
+            }
+          >
+            {/* <Route index element={<Products />} /> */}
+            <Route path="panier" element={<Cart />} />
+            <Route path="orders" element={<Order />} />
+            <Route path="produits" element={<Products />} />
+
+            {/* <Route path="produit/:id" element={<GetProductPopUp  />} /> */}
+            {/* <Route path="dashboard" element={<Dashboard />} /> */}
+            {/* <Route path="users" element={<Users />} /> */}
+          </Route>
           <Route path="/produit/:id" element={<ProductDetail />} />
-          <Route path="/panier" element={<Cart />} />
+          {/* <Route path="/panier" element={<Cart />} /> */}
 
           <Route
             path="/admin"
@@ -52,11 +72,18 @@ const App = () => (
             <Route index element={<Dashboard />} />
             <Route path="manage-products" element={<ManageProducts />} />
             <Route path="notifications" element={<Notifications />} />
-            {/* <Route path="produit/:id" element={<GetProductPopUp  />} /> */}
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="users" element={<Users />} />
-          </Route>
 
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="manage-orders" element={<MangeOrders />} />
+          </Route>
+          {/* <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <Order />
+              </ProtectedRoute>
+            }
+          /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

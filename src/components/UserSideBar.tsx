@@ -6,13 +6,14 @@ import api from "../api/axiosIntercepter"; // our Axios instance
 import { useToast } from "@/hooks/use-toast";
 import { IoMdSettings } from "react-icons/io";
 
-function AdminSideBar() {
-
+function UserSideBar() {
+     const user = useUserStore((state) => state.user);
   const { SetAccessToken, clearAccessToken } = useUserStore();
   const routes = [
     {
-      name: "Dashboard",
-      path: "/admin/dashboard",
+      name: "Produits",
+      path: !user ? "/#products" : "/produits",
+
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +27,8 @@ function AdminSideBar() {
       ),
     },
     {
-      name: "Commandes",
-      path: "/admin/manage-orders", 
+      name: "Mon panier",
+      path: "/panier",
       // give me order icon svg
       icon: (
         <svg
@@ -36,16 +37,17 @@ function AdminSideBar() {
           className="w-[18px] h-[18px] mr-3"
           viewBox="0 0 576 512"
         >
-          <path d="M528.12 301.319l47.273-208C579.806 77.61 567.938 64 552.971 64H159.208l-9.166-44.327A24 24 0 0 0 126.339 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h70.248l70.374 340.435C103.588 417.34 90.93 432 74.248 432H24c-13.255 0-24 10.745-24 24v16c0 13
-.255 10.745 24 24 24h53.208c22.773 0 41.955-15.556 46.415-37.888l7.625-36.435h293.683c15.108 0 28.573-10.659 31.174-25.655zM159.208 128h319.763l-28.8 126.666H181.818L159.208 128z" />
+          <path
+            d="M528.12 301.319l47.273-208C579.806 77.61 567.938 64 552.971 64H159.208l-9.166-44.327A24 24 0 0 0 126.339 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h70.248l70.374 340.435C103.588 417.34 90.93 432 74.248 432H24c-13.255 0-24 10.745-24 24v16c0 13
+.255 10.745 24 24 24h53.208c22.773 0 41.955-15.556 46.415-37.888l7.625-36.435h293.683c15.108 0 28.573-10.659 31.174-25.655zM159.208 128h319.763l-28.8 126.666H181.818L159.208 128z"
+          />
         </svg>
       ),
-
-  
     },
+
     {
-      name: "manage Products",
-      path: "/admin/manage-products",
+      name:  "Mes commandes" ,
+      path:  "/orders"  ,
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -57,6 +59,7 @@ function AdminSideBar() {
         </svg>
       ),
     },
+
   ];
 
   const navigate = useNavigate();
@@ -67,9 +70,8 @@ function AdminSideBar() {
   const handleLogout = async () => {
     try {
       const res = api.post("/auth/logout");
-      console.log(res.data);
       useUserStore.getState().setUser(null);
-      clearAccessToken()
+      clearAccessToken();
       toast({
         title: "Déconnexion réussie",
         description: "À bientôt !",
@@ -89,7 +91,7 @@ function AdminSideBar() {
     <>
       <nav className="bg-[#f7f7f8]   hidden  h-screen  lg:block   lg:min-w-[320px] border  py-6 px-4">
         <div className="relative flex  items-center justify-center mb-6">
-          <Link to="/admin">
+          <Link to="/">
             <img
               src={"/logo.svg"}
               alt={"Image du produit"}
@@ -102,14 +104,14 @@ function AdminSideBar() {
           <ul className="space-y-2">
             {routes.map((route) => (
               <li key={route.path}>
-                <Link
+                <a
                   onClick={() => setOpenSide(true)}
-                  to={route.path}
+                  href={route.path}
                   className="text-slate-800 font-medium hover:text-slate-900 hover:bg-gray-200 text-[15px] flex items-center rounded px-4 py-2 transition-all"
                 >
                   {route.icon}
                   <span>{route.name}</span>
-                </Link>
+                </a>
               </li>
             ))}
             <button className="mt-10" onClick={handleLogout}>
@@ -124,11 +126,10 @@ function AdminSideBar() {
           </ul>
         </div>
       </nav>
-      {/*the fixed one  */}
 
       <div
         className={`    ${
-          openSide ? " translate-x-[-220px] " : "translate-x-[0px] "
+          openSide ? " translate-x-[-210px] " : "translate-x-[0px] "
         }
  bg-[#f7f7f8]    lg:hidden z-[99]  h-screen   animate-scale-in  transition-all fixed top-0 left-0  border  py-6 px-4    `}
       >
@@ -178,4 +179,4 @@ function AdminSideBar() {
   );
 }
 
-export default AdminSideBar;
+export default UserSideBar;

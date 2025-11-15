@@ -2,6 +2,7 @@ import StatsCard from "@/components/StatsCard";
 import { ShoppingBag, User, Package } from "lucide-react";
 import { useProductNumber } from "../../api/Products";
 import { useUsersNumber } from "../../api/users";
+import { UseorderNumber } from "@/api/Order";
 function Dashboard() {
   const {
     data: productnbr,
@@ -12,10 +13,18 @@ function Dashboard() {
     data: usersnbr,
     isLoading: userNbrLoader,
     isError: isErrorUsers,
-  } = useUsersNumber(); // Use your data fetching hook here
+  }
+   = useUsersNumber(); // Use your data fetching hook here
 
-  console.log(productnbr);
-  console.log(usersnbr);
+   
+       const {
+         data: orderNumber,
+         isLoading: orderNumbeisLoading,
+         isError: isErrorOrderNumber,
+       } = UseorderNumber();
+
+
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -29,7 +38,7 @@ function Dashboard() {
             isErrorUsers
               ? "Erreur"
               : userNbrLoader
-              ? "..."
+              ? "^._.^"
               : usersnbr.users ?? 0
           }
           icon={<User size={24} />}
@@ -43,7 +52,7 @@ function Dashboard() {
             isError
               ? "Erreur"
               : ProductNbrLoader
-              ? "..."
+              ? "^._.^"
               : productnbr.productscount ?? 0
           }
           icon={<ShoppingBag size={24} />}
@@ -53,7 +62,13 @@ function Dashboard() {
 
         <StatsCard
           title="Commandes en attente"
-          stat={12}
+          stat={
+            isErrorOrderNumber
+              ? "Erreur"
+              : orderNumbeisLoading
+              ? "^._.^"
+              : orderNumber.orderCount ?? 0
+          }
           icon={<Package size={24} />}
           iconBg="bg-red-100"
           iconColor="text-red-600"

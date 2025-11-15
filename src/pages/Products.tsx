@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { useFilterProduct } from "../api/Products"
 import ProductType from "types/allTypes";
+import Loader from "@/components/Loader";
 
 export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -45,7 +46,7 @@ const categories = [
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      {/* <Navbar /> */}
 
       <div className="container mx-auto px-4 py-4">
         <div className="text-center mb-4 animate-fade-in">
@@ -115,11 +116,7 @@ const categories = [
 
 
   {isLoading && (
-        <div className="text-center py-20">
-          <p className="text-2xl  text-black text-muted-foreground">
-            Chargement des produits...
-          </p>
-        </div>
+<Loader />
       ) }
 
 

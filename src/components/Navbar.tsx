@@ -11,32 +11,22 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
   const { SetAccessToken  } = useUserStore();
  const user = useUserStore((state) => state.user);
- console.log(user)
-
-
-  // const fetchCartCount = async (userId: string) => {
-  //   const { data } = await supabase
-  //     .from('cart_items')
-  //     .select('quantity')
-  //     .eq('user_id', userId);
-
-  //   const total = data?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-  //   setCartCount(total);
-  // };
-
+  const cartCount = useUserStore((state) => state.cartCount);
   const handleLogout = async () => {
     try {
       const res = api.post("/auth/logout");
-      console.log(res.data);
-      useUserStore.getState().setUser(null);
+      useUserStore.getState().clearUser();
       SetAccessToken(null);
+      useUserStore.getState().clearAccessToken();
+
       toast({
         title: "Déconnexion réussie",
         description: "À bientôt !",
       });
+console.log("logout res ")
+      console.log(res)
       navigate("/");
     } catch (error) {
       toast({
@@ -47,10 +37,13 @@ export const Navbar = () => {
       console.log(error);
     }
   };
+ 
+console.log("the cart count ")
 
-  return (
-    <nav className="sticky top-0 z-[100] w-full  mx-auto  container  h-[100px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex  font-medium items-center text-xl justify-between">
+console.log(cartCount);
+return (
+    <nav className="sticky top-0 z-[90] w-full  mx-auto  container  h-[100px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex  font-medium items-center text-lg justify-between">
         <Link to="/" className="flex items-center space-x-2">
           <img
             src={"/logo.svg"}
@@ -80,10 +73,10 @@ export const Navbar = () => {
             Contact
           </a>
           <a
-            href="/#whay"
+            href={!user ? "/#whay" : "/orders"}
             className="text-foreground hover:text-accent transition-colors"
           >
-            Pourquoi nous
+            {user ? "Mes commandes" : "Pourquoi nous ?"}
           </a>
         </div>
 

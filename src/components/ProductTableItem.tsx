@@ -55,13 +55,13 @@ function ProductTableItem({ product }) {
 
             {/* Product Details */}
             <div className="flex flex-1  flex-row sm:items-center sm:justify-between gap-2 w-full">
-              <h3 className="flex-1  sm:w-1/5 font-semibold text-sm sm:text-base">
+              <h3 className="flex-1  sm:w-1/5 font-semibold  overflow-hidden  text-sm sm:text-base">
                 {product.name}
               </h3>
               <p className="flex-1 hidden sm:block sm:w-1/5 text-muted-foreground text-xs sm:text-sm">
                 {product.category}
               </p>
-              <p className="flex-1 sm:w-1/5 text-accent   text-center sm:text-start font-bold text-xs sm:text-sm">
+              <p className="flex-1    hidden sm:block sm:w-1/5 text-accent   text-center sm:text-start font-bold text-xs sm:text-sm">
                 {product.price.toFixed(2)} €
               </p>
               <p className="flex-1 hidden sm:block sm:w-1/5 text-muted-foreground text-xs sm:text-sm">

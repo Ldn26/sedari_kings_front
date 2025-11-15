@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 function AdminLayout() {
   return (
-    <div className="flex h-screen overflow-hidden w-full ">
+    <div className="flex h-screen bg-[#f7f3ef]  overflow-hidden w-full ">
       <AdminSideBar />
       <div className="flex-1   p-6">
         <Outlet />

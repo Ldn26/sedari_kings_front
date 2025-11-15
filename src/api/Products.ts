@@ -2,22 +2,44 @@ import api from "./axiosIntercepter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import ProductType from "../../types/allTypes";
 
+
+
+
+interface ProductResponse {
+  products: ProductType[];
+}
+
+
+
+
+interface ProductsResponse {
+  products: ProductType[];
+}
+
 export const useProducts = () => {
-  const query = useQuery<ProductType[]>({
+  const query = useQuery<ProductsResponse>({
     queryKey: ["products"],
     queryFn: async () => {
       const res = await api.get("/products");
-      return res.data as ProductType[];
+      return res.data as ProductsResponse;
     },
   });
 
   return {
-    products: query.data || [],
+    products: query.data?.products || [], // now it's ProductType[]
     isLoading: query.isLoading,
     refetch: query.refetch,
     isSuccess: query.isSuccess,
   };
 };
+
+
+
+
+
+
+
+
 
 export const useProduct = (id?: number) => {
   const query = useQuery<ProductType>({
@@ -149,6 +171,8 @@ interface FilterProductResponse {
   totalPages: number;
   page: number;
 }
+
+
 
 export const useFilterProduct = ({
   name = "",

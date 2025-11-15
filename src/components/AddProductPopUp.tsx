@@ -19,11 +19,11 @@ function AddProductPopUp({
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    name: "youc",
-    desc: "ww",
-    price: "123",
+    name: "",
+    desc: "",
+    price: "",
     category: "tables",
-    quantity: "123",
+    quantity: "",
     images: [] as string[], // now an array
   });
   // Save multiple images
