@@ -16,7 +16,6 @@ import AdminLayout from "./components/AdminLayout";
 import ManageProducts from "./pages/admin/ManageProducts";
 import Notifications from "./pages/admin/Notifications";
 import Dashboard from "./pages/admin/Dashboard";
-import Users from "./pages/admin/Users";
 import Order from "./pages/Order";
 import UserLayout from "./components/UserLayout";
 import MangeOrders from "./pages/admin/MangeOrders";

@@ -21,11 +21,6 @@ export default function Products() {
 
 
 
-console.log(selectedCategory)
-
- 
-  
-  console.log(products)
 
   const categories = [
     { value: "all", label: "Tous" },

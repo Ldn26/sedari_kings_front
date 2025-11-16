@@ -3,17 +3,15 @@ import useUserStore from "../store/store.js";
 
 // Create Axios instance
 const api = axios.create({
-  // baseURL: "http://localhost:4000/api",
-  baseURL: "https://sedarri-kings-backend.onrender.com/api",
-  withCredentials: true, // sends HTTP-only cookies
+  baseURL: import.meta.env.VITE_SERVER_URL,
+  withCredentials: true,
 });
 
-// Attach access token to every request
-api.interceptors.request.use(
+api.interceptors.request.use(  
   (config) => {
     // Get the latest accessToken from Zustand store
     const accessToken = useUserStore.getState().accessToken;
-    console.log(accessToken)
+    // console.log(accessToken);
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
@@ -28,10 +26,10 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     // to avoid infinit loop     _retry flag
-    console.log("from the axios intercepter  ")
-    console.log("error .responsoe")
-    console.log(error.response)
-    // console.log("the original resequet retry ")
+    // console.log("from the axios intercepter  ");
+    // console.log("error .responsoe");
+    // console.log(error.response);
+    // // console.log("the original resequet retry ")
     // console.log(originalRequest)
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -39,15 +37,14 @@ api.interceptors.response.use(
       try {
         // Call refresh endpoint (refresh token in HTTP-only cookie)
         const res = await axios.post(
-          "https://sedarri-kings-backend.onrender.com/api/auth/refreshToken",
-          // "http://localhost:4000/api/auth/refreshToken",
+          `${process.env.SERVER_URL}/auth/refreshToken`,
           {},
           { withCredentials: true } // must be inside the request config
         );
 
         const newAccessToken = res.data.accessToken;
-        console.log("the new acees token from the frontend  ");
-        console.log(newAccessToken);
+        // console.log("the new acees token from the frontend  ");
+        // console.log(newAccessToken);
         // Update Zustand store
         useUserStore.getState().SetAccessToken(newAccessToken);
 
@@ -60,7 +57,6 @@ api.interceptors.response.use(
         // console.error("Refresh token invalid, redirecting to login...");
         // Optionally: redirect user to login page
         // window.location.href = "/auth";
-
       }
     }
 

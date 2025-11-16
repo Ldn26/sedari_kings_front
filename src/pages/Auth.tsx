@@ -79,8 +79,6 @@ const { SetAccessToken } = useUserStore();
     setLoading(true);
     try {
       const res = await api.post("/auth/login", { email, password });
-      console.log(res.data);
-      // Store access token in memory
       SetAccessToken(res.data.accessToken);
       useUserStore.getState().setUser(res.data.user);
       useUserStore.getState().SetAccessToken(res.data.accessToken);
