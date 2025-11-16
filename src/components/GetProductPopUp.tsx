@@ -20,7 +20,7 @@ function GetProductPopUp({
 }: {
   setOpenModel: React.Dispatch<React.SetStateAction<boolean>>;
   id: number;
-  deleteProduct: ReturnType<typeof useDeleteProduct>;
+  deleteProduct: ReturnType<typeof useDeleteProduct>["mutate"];
   DeleteLoader: boolean;
   allowEdit :boolean;
 }) {
@@ -30,7 +30,19 @@ function GetProductPopUp({
     isError: EditIsError,
     isLoading: EditLoading,
   } = useEditProduct();
-  const { toast } = useToast();
+  const { toast } = useToast();  
+
+
+    const [formData, setFormData] = useState({
+      name: "",
+      desc: "",
+      price: 0,
+      quantity: 0,
+      category: "",
+     
+      imageUrl: [] as string[],
+    });
+
   const handelEdit = (productId: number) => {
     if (!formData.name || !formData.desc || !formData.category) {
       toast({
@@ -39,7 +51,7 @@ function GetProductPopUp({
       });
       return;
     }
-    updateProduct({ productId, productData: formData });
+    updateProduct({ productId, productData: { ...formData, id: productId } });
     setCanEdit(false);
     if (isSuccess) {
       toast({
@@ -131,14 +143,7 @@ useEffect(() => {
    }
 } , []);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    desc: "",
-    price: 0,
-    quantity: 0,
-    category: "",
-    imageUrl: [] as string[],
-  });
+
 
   useEffect(() => {
     console.log(product);
@@ -157,16 +162,16 @@ useEffect(() => {
   if (isLoading) return <Loader />;
   if (isError) return <div>Erreur lors du chargement du produit.</div>;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 overflow-y-scroll     z-50 flex items-center justify-center">
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50"></div>
       {/* Centered Card */}
-      <Card className="relative animate-fade-in-up w-full max-w-3xl mx-2">
+      <Card className="relative animate-fade-in-up w-full max-w-3xl mx-2 max-h-[90vh] overflow-y-auto">
         <button
           className="flex absolute right-4 top-2 hover:scale-105 transition-all items-center justify-center"
           onClick={() => setOpenModel(false)}
         >
-          <IoCloseCircleOutline color="black" size={20} />
+          <IoCloseCircleOutline color="red" size={20} />
         </button>
         <CardHeader>
           <CardTitle>Produit Details</CardTitle>
@@ -312,7 +317,7 @@ useEffect(() => {
               )}
             </div>
 
-            <div className="flex flex-col lg:flex-row justify-between gap-8">
+            <div className="flex flex-col lg:flex-row justify-between gap-2">
               {!canEdit ? (
                 <div
                   className="w-full bg-primary  cursor-pointer p-2 text-white  rounded-xl flex items-center justify-center hover:scale-105 transition-all"

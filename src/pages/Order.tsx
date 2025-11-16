@@ -5,16 +5,13 @@ import {
   ChevronUp,
   Package,
   Calendar,
-  Loader2,
 } from "lucide-react";
-import { useOrders } from "@/api/Order";
+import { useOrdersClient } from "@/api/Order";
 import Loader from "@/components/Loader";
 import { OrderType } from "types/allTypes";
 
 function Order() {
-    const { data, isSuccess, isLoading } = useOrders();
-  
-    console.log(data)
+    const { data, isLoading } = useOrdersClient();
   const [openOrderId, setOpenOrderId] = useState<number | null>(null);
 
   const toggleOrder = (id: number) => {

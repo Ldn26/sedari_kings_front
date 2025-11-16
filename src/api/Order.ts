@@ -22,23 +22,34 @@ export const useOrders = () => {
   };
 };
 
-// export const useOrder = (id?: number) => {
-//   const query = useQuery<ProductType>({
-//     queryKey: ["product", id],
-//     queryFn: async () => {
-//       const res = await api.get(`/product/${id}`);
-//       return res.data.product as ProductType;
-//     },
-//     enabled: !!id,
-//   });
 
-//   return {
-//     data: query.data,
-//     isLoading: query.isLoading,
-//     isError: query.isError,
-//     error: query.error,
-//   };
-// };
+
+
+
+
+ export const useOrdersClient = () => {
+  const query = useQuery<OrdersResponse>({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      const res = await api.get("/orders/users/" );
+      return res.data as OrdersResponse;
+    }
+    ,
+  });
+  return {
+    data: query.data?.orders || [],
+    isLoading: query.isLoading,
+    refetch: query.refetch,
+    isSuccess: query.isSuccess,
+  };
+}
+
+
+
+
+
+
+
 
 export const UseorderNumber = () => {
   const query = useQuery<{

@@ -40,7 +40,7 @@ function OrderTableItem({ order }) {
         <Card className="w-full hover:brightness-95 transition-all animate-fade-in-up rounded-xl shadow-sm border border-[#d7cfc8]">
           <CardContent className="flex items-center justify-between p-3 gap-2">
             <div className="flex-1 text-left text-xs sm:text-md sm:w-1/5    font-semibold">
-              {order.User.name}
+              {order?.User?.name}
             </div>
         
 

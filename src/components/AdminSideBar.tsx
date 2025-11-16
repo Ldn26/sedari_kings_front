@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { CiLogin } from "react-icons/ci";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import useUserStore from "../store/store";
 import api from "../api/axiosIntercepter"; // our Axios instance
 import { useToast } from "@/hooks/use-toast";
 import { IoMdSettings } from "react-icons/io";
 
 function AdminSideBar() {
-
+ const location = useLocation();
   const { SetAccessToken, clearAccessToken } = useUserStore();
   const routes = [
     {
@@ -67,7 +67,6 @@ function AdminSideBar() {
   const handleLogout = async () => {
     try {
       const res = api.post("/auth/logout");
-      console.log(res.data);
       useUserStore.getState().setUser(null);
       clearAccessToken()
       toast({
@@ -100,18 +99,25 @@ function AdminSideBar() {
 
         <div className="overflow-auto h-full">
           <ul className="space-y-2">
-            {routes.map((route) => (
-              <li key={route.path}>
-                <Link
-                  onClick={() => setOpenSide(true)}
-                  to={route.path}
-                  className="text-slate-800 font-medium hover:text-slate-900 hover:bg-gray-200 text-[15px] flex items-center rounded px-4 py-2 transition-all"
-                >
-                  {route.icon}
-                  <span>{route.name}</span>
-                </Link>
-              </li>
-            ))}
+            {routes.map((route) => {
+              const isActive = location.pathname === route.path; 
+              return (
+                <li key={route.path}>
+                  <Link
+                    onClick={() => setOpenSide(true)}
+                    to={route.path}
+                    className={`text-[15px] flex items-center rounded px-4 py-2 transition-all font-medium ${
+                      isActive
+                        ? "hover:bg-orange-900 text-white bg-primary"
+                        : "text-slate-800 hover:text-slate-900 hover:bg-gray-200"
+                    }`}
+                  >
+                    {route.icon}
+                    <span>{route.name}</span>
+                  </Link>
+                </li>
+              );
+            })}
             <button className="mt-10" onClick={handleLogout}>
               <div className="flex hover:bg-gray-200  transition-all items-center">
                 <CiLogin color="red" size={30} />
@@ -150,18 +156,27 @@ function AdminSideBar() {
 
         <div className="overflow-auto h-full">
           <ul className="space-y-2">
-            {routes.map((route) => (
-              <li key={route.path}>
-                <Link
-                  onClick={() => setOpenSide(true)}
-                  to={route.path}
-                  className="text-slate-800 font-medium hover:text-slate-900 hover:bg-gray-200 text-[15px] flex items-center rounded px-4 py-2 transition-all"
-                >
-                  {route.icon}
-                  <span>{route.name}</span>
-                </Link>
-              </li>
-            ))}
+           {routes.map((route) => { 
+       
+                 const isActive = location.pathname === route.path; 
+   
+                 return (
+                   <li key={route.path}>
+                     <Link
+                       onClick={() => setOpenSide(true)}
+                       to={route.path}
+                       className={`text-[15px]  flex items-center rounded px-4 py-2 transition-all font-medium ${
+                         isActive
+                           ? "hover:bg-orange-900 text-white  bg-primary"
+                           : "text-slate-800 hover:text-slate-900 hover:bg-gray-200"
+                       }`}
+                     >
+                       {route.icon}
+                       <span>{route.name}</span>
+                     </Link>
+                   </li>
+                 );
+               })}
             <button className="mt-10" onClick={handleLogout}>
               <div className="flex hover:bg-gray-200  transition-all items-center">
                 <CiLogin color="red" size={30} />

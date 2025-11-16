@@ -55,7 +55,7 @@ export default function Admin() {
 
           <button
             onClick={() => setOpenModel(true)}
-            className="px-4 py-2 bg-green-600 flex items-center text-white rounded-lg hover:bg-gold-700 transition-colors"
+            className="px-4 py-2 bg-green-700 flex items-center text-white rounded-lg hover:bg-gold-700 transition-colors"
           >
             <IoAdd size={24} />
             Ajouter un Produit
@@ -124,7 +124,7 @@ export default function Admin() {
         </div>
 
         {/* Products List */}
-        <div className="space-y-4 max-h-[750px] overflow-y-auto">
+        <div className="space-y-4  pb-[60px] border max-h-[760px]  overflow-y-scroll">
           {filteredProducts.length ? (
             filteredProducts.map((product: ProductType) => (
               <ProductTableItem key={product.id} product={product} />

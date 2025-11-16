@@ -158,6 +158,25 @@ export const useDeleteProduct = () => {
   };
 };
 
+// interface FilterProductParams {
+//   name?: string;
+//   category?: string;
+//   page?: number;
+//   limit?: number;
+// }
+
+// interface FilterProductResponse {
+//   products: ProductType[];
+//   total: number;
+//   totalPages: number;
+//   page: number;
+// }
+
+ 
+
+
+
+ 
 interface FilterProductParams {
   name?: string;
   category?: string;
@@ -168,11 +187,9 @@ interface FilterProductParams {
 interface FilterProductResponse {
   products: ProductType[];
   total: number;
-  totalPages: number;
   page: number;
+  totalPages: number;
 }
-
-
 
 export const useFilterProduct = ({
   name = "",
@@ -181,7 +198,7 @@ export const useFilterProduct = ({
   limit = 10,
 }: FilterProductParams) => {
   const query = useQuery<FilterProductResponse>({
-    queryKey: ["products", name, category, page, limit],
+    queryKey: ["products", name, category || "all", page, limit],
     queryFn: async () => {
       const params: Record<string, unknown> = { page, limit };
       if (name) params.name = name;
@@ -190,7 +207,7 @@ export const useFilterProduct = ({
       const res = await api.get("/products/filter", { params });
       return res.data as FilterProductResponse;
     },
-    staleTime: 5000, 
+    staleTime: 15000, 
   });
 
   return {
@@ -203,3 +220,47 @@ export const useFilterProduct = ({
     isSuccess: query.isSuccess,
   };
 };
+
+
+
+// export const useFilterProduct = ({
+//   name = "",
+//   category = "all",
+//   page = 1,
+//   limit = 10,
+// }: FilterProductParams) => {
+//   console.log("cate")
+//   console.log(category)
+//   const query = useQuery<FilterProductResponse>({
+//     queryKey: ["products", name, category, page, limit],
+//     queryFn: async () => {
+//       const params: Record<string, unknown> = { page, limit };
+//       if (name) params.name = name;
+//       if (category && category !== "all") params.category = category;
+
+//       const res = await api.get("/products/filter", { params });
+//       return res.data as FilterProductResponse;
+//     },
+//     staleTime: 5000, 
+//   });
+
+//   return {
+//     products: query.data?.products || [],
+//     total: query.data?.total || 0,
+//     totalPages: query.data?.totalPages || 1,
+//     page: query.data?.page || 1,
+//     isLoading: query.isLoading,
+//     refetch: query.refetch,
+//     isSuccess: query.isSuccess,
+//   };
+// };
+  
+
+
+
+
+
+
+
+
+

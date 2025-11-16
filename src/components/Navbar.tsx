@@ -11,8 +11,8 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
-  const { SetAccessToken  } = useUserStore();
- const user = useUserStore((state) => state.user);
+  const { SetAccessToken } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const cartCount = useUserStore((state) => state.cartCount);
   const handleLogout = async () => {
     try {
@@ -25,8 +25,8 @@ export const Navbar = () => {
         title: "Déconnexion réussie",
         description: "À bientôt !",
       });
-console.log("logout res ")
-      console.log(res)
+      console.log("logout res ");
+      console.log(res);
       navigate("/");
     } catch (error) {
       toast({
@@ -37,11 +37,11 @@ console.log("logout res ")
       console.log(error);
     }
   };
- 
-console.log("the cart count ")
 
-console.log(cartCount);
-return (
+  console.log("the cart count ");
+
+  console.log(cartCount);
+  return (
     <nav className="sticky top-0 z-[90] w-full  mx-auto  container  h-[100px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex  font-medium items-center text-lg justify-between">
         <Link to="/" className="flex items-center space-x-2">
