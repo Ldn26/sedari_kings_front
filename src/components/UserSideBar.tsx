@@ -10,7 +10,6 @@ function UserSideBar() {
   const location = useLocation(); 
     
 
-       console.log(location.pathname);
 
      const user = useUserStore((state) => state.user);
   const { SetAccessToken, clearAccessToken } = useUserStore();

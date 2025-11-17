@@ -115,12 +115,7 @@ function GetProductPopUp({
             // Convert to WebP & remove metadata
             const optimizedImage = canvas.toDataURL("image/webp", 0.7);
   
-            console.log(
-              "Optimized image size:",
-              (optimizedImage.length / 1024).toFixed(2),
-              "KB"
-            );
-  
+
             newImages.push(optimizedImage);
             resolve();
           };
@@ -146,7 +141,6 @@ useEffect(() => {
 
 
   useEffect(() => {
-    console.log(product);
     if (product) {
       setFormData({
         name: product.name,

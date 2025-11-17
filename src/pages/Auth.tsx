@@ -92,7 +92,8 @@ const { SetAccessToken } = useUserStore();
       } else {
         navigate("/"); // go to home page
       }
-    } catch (error :unknown) {
+    } catch (error :unknown) { 
+       console.log(error)
           const err = error as AxiosError<{ message: string }>;
 
           toast({

@@ -53,8 +53,7 @@ function GetOrderPopUp({
     } 
 
 
-    console.log(order.id);
-    console.log(formData.status)
+   
     try {
       await updateStatus({ orderId: order.id, status: formData.status });
       toast({

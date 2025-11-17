@@ -18,8 +18,7 @@ export default function ProductDetail() {
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
-   console.log("the product")
-console.log(product)
+  
   const { addTocart } = useUserStore.getState();
   
 const handleAddToCart = () => {

@@ -25,8 +25,7 @@ export const Navbar = () => {
         title: "Déconnexion réussie",
         description: "À bientôt !",
       });
-      console.log("logout res ");
-      console.log(res);
+   
       navigate("/");
     } catch (error) {
       toast({
@@ -38,9 +37,7 @@ export const Navbar = () => {
     }
   };
 
-  console.log("the cart count ");
 
-  console.log(cartCount);
   return (
     <nav className="sticky top-0 z-[90] w-full  mx-auto  container  h-[100px]  border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex  font-medium items-center text-lg justify-between">
