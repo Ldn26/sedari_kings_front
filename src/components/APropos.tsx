@@ -15,31 +15,31 @@ function APropos() {
       title: "Matériaux Nobles",
       description:
         "Sélection rigoureuse de bois massif, tissus précieux et finitions durables pour un mobilier qui traverse le temps.",
-      image: "/sec1.jpg",
+      image: "/sec10.png",
+    },
+
+    {
+      id: 3,
+      title: "Design Sur-Mesure",
+      description:
+        "Conception personnalisée adaptée à votre style, vos besoins et l'architecture de votre espace.",
+      image: "./sec9.png",
     },
     {
       id: 2,
       title: "Savoir-Faire Artisanal",
       description:
         "Techniques ancestrales transmises de génération en génération par nos maîtres artisans marocains.",
-      image: "/sec2.jpg",
+      image: "/sec8.png",
       icon: Hammer,
-    },
-    {
-      id: 3,
-      title: "Design Sur-Mesure",
-      description:
-        "Conception personnalisée adaptée à votre style, vos besoins et l'architecture de votre espace.",
-      image: "./sec3.jpg",
     },
     {
       id: 4,
       title: "Confort Premium",
       description:
         "Ergonomie et qualité exceptionnelle pour des moments de détente absolue dans votre salon marocain.",
-      image: "./sec4.jpg",
+      image: "./sec7.png",
     },
-
   ];
 
 

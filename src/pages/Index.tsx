@@ -8,7 +8,6 @@ import WhayChooseUs from "@/components/WhayChooseUs";
 import HeroSection from "@/components/HeroSection";
 export default function Index() {
 
-
   return (
     <div className="min-h-screen bg-background text-foreground"> 
       <Navbar />

@@ -47,12 +47,15 @@ const handleAddToCart = () => {
   }
 };
 
+console.log("Product url ")
+  console.log(product)
 
-  const convertToImageGalleryItems = (imageUrls: string[]) =>
-    imageUrls.map((url) => ({
-      original: url,
-      thumbnail: url,
-    }));
+
+const convertToImageGalleryItems = (images: { url: string }[]) =>
+  images.map((img) => ({
+    original: img.url,
+    thumbnail: img.url,
+  }));
 
   if (isLoading)
     return (
@@ -94,14 +97,17 @@ const handleAddToCart = () => {
               lazyLoad={true}
               showBullets={true}
               additionalClass="rounded-lg"
-              renderItem={(item) => (
-                <img
-                  src={item.original }
-                  alt={product.name}
-                  style={{ width: "100%", height: "auto" }}
-                  className="rounded-lg max-h-[80vh] md:max-h-[90vh] object-contain"
-                />
-              )}
+              renderItem={(item) => {
+                // console.log("Image URL:", item.original); // log safely here
+                return (
+                  <img
+                    src={item.original}
+                    alt={product.name}
+                    style={{ width: "100%", height: "auto" }}
+                    className="rounded-lg max-h-[80vh] md:max-h-[90vh] object-contain"
+                  />
+                );
+              }}
             />
           </div>
           {/* Right: Product Info */}

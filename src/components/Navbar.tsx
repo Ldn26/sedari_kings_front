@@ -20,7 +20,7 @@ export const Navbar = () => {
       useUserStore.getState().clearUser();
       SetAccessToken(null);
       useUserStore.getState().clearAccessToken();
-
+    useUserStore.getState().clearCart();
       toast({
         title: "Déconnexion réussie",
         description: "À bientôt !",
@@ -78,9 +78,9 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          {user ? (
+          { user  ? (
             <>
-              {isAdmin && (
+              {  isAdmin && (
                 <Button
                   variant="ghost"
                   size="icon"

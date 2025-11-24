@@ -72,7 +72,9 @@ function AdminSideBar() {
       toast({
         title: "Déconnexion réussie",
         description: "À bientôt !",
-      });
+      });   
+          useUserStore.getState().clearCart();
+      
       navigate("/");
     } catch (error) {
       toast({

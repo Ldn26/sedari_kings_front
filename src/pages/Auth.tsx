@@ -112,7 +112,7 @@ const { SetAccessToken } = useUserStore();
     <>
       <Navbar />
       <div
-        style={{ backgroundImage: "url('/sec4.jpg')" }}
+        style={{ backgroundImage: "url('/sec6.png')" }}
         className="h-[calc(100vh-100px)] flex items-center justify-center p-4 
              bg-cover bg-center bg-no-repeat animate-fade-in"
       >

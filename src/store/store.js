@@ -2,56 +2,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const useUserStoreOld = create(
-  persist(
-    (set) => ({
-      user: null,
-      openPopUp: false,
-      setOpenPopUp: (open) => set({ openPopUp: open }),
-      setUser: (user) => set({ user }),
-      clearUser: () => set({ user: null }),
-      accessToken: null,
-      SetAccessToken: (token) => set({ accessToken: token }),
-      clearAccessToken: () => set({ accessToken: null }),
-      cart: [],
-      addTocart: (item) =>
-        set((state) => {
-          const existingItem = state.cart.find((cartItem) => cartItem.id === item.id);
-          if (existingItem) {
-            return {
-              cart: state.cart.map((cartItem) =>
-                cartItem.id === item.id
-                  ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-                  : cartItem
-              ),
-            };
-          }
-          return { cart: [...state.cart, item] };
-        }
-    ),
-      cartCount: 0,
-      setCartCount: (count) => set({ cartCount: count }),      
-      removeFromCart: (itemId) =>
-        set((state) => ({
-          cart: state.cart.filter((item) => item.id !== itemId),
-        })),
-      clearCart: () => set({ cart: [] }),
-      updateQuantity: (itemId, newQuantity) =>
-        set((state) => ({
-          cart: state.cart.map((item) =>
-            item.id === itemId ? { ...item, quantity: newQuantity } : item
-          ),
-          
-        })),
-        
-
-    }),
-    {
-      name: "user-storage", // key in localStorage
-    }
-  )
-);
-
 
 const useUserStore = create(
   persist(

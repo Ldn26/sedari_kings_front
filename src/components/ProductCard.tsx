@@ -14,7 +14,6 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const navigate = useNavigate();
   const { id, name, price, category, imageUrl, quantity } = product;
-
   return (
     <Card
       className="group overflow-hidden border-border hover:shadow-lg transition-all duration-300 cursor-pointer animate-fade-in-up bg-card"
@@ -23,7 +22,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <div className="aspect-square overflow-hidden bg-muted">
         <img
           src={
-            imageUrl && imageUrl.length > 0 ? imageUrl[0] : "/placeholder.svg"
+            imageUrl && imageUrl.length > 0
+              ? imageUrl[0].url
+              : "/placeholder.svg"
           }
           alt={name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"

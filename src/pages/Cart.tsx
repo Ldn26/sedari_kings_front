@@ -73,9 +73,9 @@ const removeElement = (itemId: number) => {
                 <Card key={item.id} className="animate-fade-in-up">
                   <CardContent className="p-6">
                     <div className="flex gap-4">
-                      <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                      <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">  
                         <img
-                          src={item.imageUrl[0] || "/placeholder.svg"}
+                          src={item?.imageUrl[0]?.url || "/placeholder.svg"}
                           alt={item.name}
                           className="w-full h-full object-cover"
                         />

@@ -2,19 +2,12 @@ import api from "./axiosIntercepter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import ProductType from "../../types/allTypes";
 
-
-
-
-interface ProductResponse {
-  products: ProductType[];
-}
-
-
-
-
 interface ProductsResponse {
   products: ProductType[];
 }
+
+
+
 
 export const useProducts = () => {
   const query = useQuery<ProductsResponse>({
@@ -23,22 +16,21 @@ export const useProducts = () => {
       const res = await api.get("/products");
       return res.data as ProductsResponse;
     },
+
+    structuralSharing: false,
+    select: (data) => ({
+      ...data,
+      products: [...data.products],
+    }),
   });
 
   return {
-    products: query.data?.products || [], // now it's ProductType[]
+    products: query.data?.products || [],
     isLoading: query.isLoading,
     refetch: query.refetch,
     isSuccess: query.isSuccess,
   };
 };
-
-
-
-
-
-
-
 
 
 export const useProduct = (id?: number) => {
@@ -78,6 +70,7 @@ export const useProductNumber = () => {
     isError: query.isError,
   };
 };
+  
 
 export const useEditProduct = () => {
   const queryClient = useQueryClient();
@@ -85,26 +78,29 @@ export const useEditProduct = () => {
   const mutation = useMutation<
     ProductType,
     Error,
-    { productId: number; productData: ProductType }
+    { productId: number; productData: FormData }
   >({
     mutationFn: async ({ productId, productData }) => {
       if (!productId) throw new Error("Product ID is required");
-      if (!productData.name || !productData.price || !productData.category || !productData.desc) {
-        throw new Error("All product fields are required");
-      }
-      const res = await api.patch(`/product/${productId}`, productData);
-      return res.data as ProductType;
+
+      const res = await api.patch(`/product/${productId}`, productData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      return res.data.product as ProductType;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      queryClient.invalidateQueries({ queryKey: ["product", variables.productId] });
+      queryClient.invalidateQueries({
+        queryKey: ["product", variables.productId],
+      });
     },
   });
 
   return {
     updateProduct: mutation.mutate,
     data: mutation.data,
-    isLoading: mutation.isPending,
+    isLoading: mutation.isPending  , 
     isError: mutation.isError,
     error: mutation.error,
     isSuccess: mutation.isSuccess,
@@ -113,8 +109,7 @@ export const useEditProduct = () => {
 
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
-
-  const mutation = useMutation<ProductType, Error, ProductType>({
+  const mutation = useMutation<ProductType, Error, FormData>({
     mutationFn: async (productData) => {
       const res = await api.post("/product", productData);
       return res.data.product as ProductType;
@@ -134,6 +129,11 @@ export const useCreateProduct = () => {
   };
 };
 
+  
+
+
+
+
 export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
 
@@ -142,8 +142,21 @@ export const useDeleteProduct = () => {
       const res = await api.delete(`/product/${id}`);
       return res.data as ProductType;
     },
+
     onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      // 1️⃣ Remove the deleted product from the "products" cache
+      queryClient.setQueryData<{ products: ProductType[] }>(
+        ["products"],
+        (oldData) => {
+          if (!oldData) return { products: [] };
+          return {
+            ...oldData,
+            products: oldData.products.filter((p) => p.id !== id),
+          };
+        }
+      );
+
+      // 2️⃣ Invalidate the single product query
       queryClient.invalidateQueries({ queryKey: ["product", id] });
     },
   });
@@ -158,21 +171,34 @@ export const useDeleteProduct = () => {
   };
 };
 
-// interface FilterProductParams {
-//   name?: string;
-//   category?: string;
-//   page?: number;
-//   limit?: number;
-// }
+  
+export const useDeleteProductwork = () => {
+  const queryClient = useQueryClient();
 
-// interface FilterProductResponse {
-//   products: ProductType[];
-//   total: number;
-//   totalPages: number;
-//   page: number;
-// }
+  const mutation = useMutation<ProductType, Error, number>({
+    mutationFn: async (id) => {
+      const res = await api.delete(`/product/${id}`);
+      return res.data as ProductType;
+    },
 
- 
+    onSuccess: (_, id) => {
+      // Invalidate the single product query
+      queryClient.invalidateQueries({ queryKey: ["product", id] });
+
+      // Invalidate the product list
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+
+  return {
+    deleteProduct: mutation.mutate,
+    data: mutation.data,
+    isLoading: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error,
+    isSuccess: mutation.isSuccess,
+  };
+};
 
 
 
@@ -220,42 +246,6 @@ export const useFilterProduct = ({
     isSuccess: query.isSuccess,
   };
 };
-
-
-
-// export const useFilterProduct = ({
-//   name = "",
-//   category = "all",
-//   page = 1,
-//   limit = 10,
-// }: FilterProductParams) => {
-//   console.log("cate")
-//   console.log(category)
-//   const query = useQuery<FilterProductResponse>({
-//     queryKey: ["products", name, category, page, limit],
-//     queryFn: async () => {
-//       const params: Record<string, unknown> = { page, limit };
-//       if (name) params.name = name;
-//       if (category && category !== "all") params.category = category;
-
-//       const res = await api.get("/products/filter", { params });
-//       return res.data as FilterProductResponse;
-//     },
-//     staleTime: 5000, 
-//   });
-
-//   return {
-//     products: query.data?.products || [],
-//     total: query.data?.total || 0,
-//     totalPages: query.data?.totalPages || 1,
-//     page: query.data?.page || 1,
-//     isLoading: query.isLoading,
-//     refetch: query.refetch,
-//     isSuccess: query.isSuccess,
-//   };
-// };
-  
-
 
 
 

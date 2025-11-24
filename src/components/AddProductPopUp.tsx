@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Label } from "./ui/label";
@@ -13,103 +13,79 @@ function AddProductPopUp({
 }: {
   setOpenModel: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [loading, setLoading] = useState(false);
-  const { createProduct, isLoading, isError, data, error, isSuccess } =
-    useCreateProduct();
+  const { createProduct, isLoading } = useCreateProduct();
   const { toast } = useToast();
+  
 
-  const [formData, setFormData] = useState({
+
+
+
+
+
+
+  const [formData, setFormData] = useState<{
+    name: string;
+    desc: string;
+    price: string;
+    category: string;
+    quantity: string;
+    images: File[];
+  }>({
     name: "",
     desc: "",
     price: "",
     category: "tables",
     quantity: "",
-    images: [] as string[], // now an array
+    images: [],
   });
-  // Save multiple images
-  const saveImagesToFormData = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = e.target.files;
-    if (!files) return;
 
-    const newImages: string[] = [];
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
 
-      await new Promise<void>((resolve) => {
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
+  const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
 
-          // Resize logic
-          const maxWidth = 800;
-          const maxHeight = 800;
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > maxWidth) {
-              height = (height * maxWidth) / width;
-              width = maxWidth;
-            }
-          } else {
-            if (height > maxHeight) {
-              width = (width * maxHeight) / height;
-              height = maxHeight;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          // Convert to WebP & remove metadata
-          const optimizedImage = canvas.toDataURL("image/webp", 0.7);
-
-          console.log(
-            "Optimized image size:",
-            (optimizedImage.length / 1024).toFixed(2),
-            "KB"
-          );
-
-          newImages.push(optimizedImage);
-          resolve();
-        };
-      });
-    }
-
-    setFormData({ ...formData, images: [...formData.images, ...newImages] });
+    const newFiles = Array.from(e.target.files);
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...newFiles],
+    }));
   };
 
-  // Handle Add Product
-  const handelAddProduct = () => { 
-    console.log("the fornData ");
-    console.log(formData);
+  useEffect(() => {
+    const urls = formData.images.map((file) => URL.createObjectURL(file));
+    setPreviewImages(urls);
+
+    return () => urls.forEach((url) => URL.revokeObjectURL(url));
+  }, [formData.images]);
+
+
+  const handleAddProduct = () => {
     if (
       !formData.name ||
       !formData.price ||
       !formData.category ||
       !formData.quantity
-    )
+    ) {
       return toast({
         variant: "destructive",
         title: "Tous les champs obligatoires doivent être remplis",
         description: "Veuillez remplir tous les champs obligatoires.",
       });
-     
+    }
 
-    createProduct({
-      name: formData.name,
-      desc: formData.desc,
-      price: parseFloat(formData.price),
-      category: formData.category,
-      quantity: parseInt(formData.quantity, 10),
-      imageUrl: formData.images, // send the array
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("desc", formData.desc);
+    data.append("price", formData.price);
+    data.append("category", formData.category);
+    data.append("quantity", formData.quantity);
+
+    formData.images.forEach((file) => {
+      data.append("images", file); // key must match backend multer array
     });
+
+    createProduct(data);
 
     toast({
       variant: "default",
@@ -123,10 +99,9 @@ function AddProductPopUp({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
-
+      <div className="absolute inset-0  bg-black/50"></div>
       {/* Centered Card */}
-      <Card className="relative animate-fade-in-up w-full max-w-md mx-2">
+      <Card className="relative animate-fade-in-up w-full    max-w-md mx-4 ">
         <button
           className="flex absolute right-4 top-2 hover:scale-105 transition-all items-center justify-center"
           onClick={() => setOpenModel(false)}
@@ -138,6 +113,7 @@ function AddProductPopUp({
         </CardHeader>
         <CardContent>
           <form className="space-y-4">
+            {/* Name */}
             <div className="space-y-2">
               <Label htmlFor="name">Nom du produit</Label>
               <Input
@@ -149,27 +125,29 @@ function AddProductPopUp({
               />
             </div>
 
+            {/* Description */}
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
+                value={formData.desc}
                 onChange={(e) =>
                   setFormData({ ...formData, desc: e.target.value })
                 }
-                value={formData.desc}
                 rows={3}
               />
             </div>
 
+            {/* Price & Quantity */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="price">Prix (€)</Label>
                 <Input
+                  type="number"
+                  step="0.01"
                   value={formData.price}
                   onChange={(e) =>
                     setFormData({ ...formData, price: e.target.value })
                   }
-                  type="number"
-                  step="0.01"
                   required
                 />
               </div>
@@ -177,20 +155,22 @@ function AddProductPopUp({
               <div className="space-y-2">
                 <Label htmlFor="stock">Stock</Label>
                 <Input
+                  type="number"
                   value={formData.quantity}
                   onChange={(e) =>
                     setFormData({ ...formData, quantity: e.target.value })
                   }
-                  type="number"
                   required
                 />
               </div>
             </div>
 
+            {/* Category */}
             <div className="space-y-2">
               <Label htmlFor="category">Catégorie</Label>
               <select
                 id="category"
+                value={formData.category}
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
@@ -207,23 +187,23 @@ function AddProductPopUp({
               </select>
             </div>
 
+            {/* Images */}
             <div className="space-y-2">
-              <Label htmlFor="image">Images du produit</Label>
+              <Label htmlFor="images">Images du produit</Label>
               <input
                 type="file"
                 id="images"
                 accept="image/*"
-                capture="environment"
                 multiple
-                onChange={(e) => saveImagesToFormData(e)}
+                onChange={handleImagesChange}
                 className="w-full border rounded-md px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              {formData.images.length > 0 && (
+              {previewImages.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {formData.images.map((img, idx) => (
+                  {previewImages.map((src, idx) => (
                     <img
                       key={idx}
-                      src={img}
+                      src={src}
                       alt={`Preview ${idx}`}
                       className="w-24 h-24 object-cover rounded"
                     />
@@ -232,8 +212,9 @@ function AddProductPopUp({
               )}
             </div>
 
+            {/* Submit */}
             <div
-              onClick={handelAddProduct}
+              onClick={handleAddProduct}
               className={`w-full flex items-center justify-center p-2 rounded-xl bg-primary ${
                 isLoading
                   ? "opacity-50 cursor-not-allowed"

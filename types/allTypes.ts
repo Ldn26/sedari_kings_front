@@ -6,10 +6,11 @@ type ProductType = {
   desc: string; // match API field
   quantity:  number;
   createdAt?: string;
-  imageUrl: string[]  | null;
   updatedAt?: string;
   height?: number | null;
   width?: number | null;
+    imageUrl: string[] | File[] | null; // support both URLs and new uploaded files
+
 };
 
 export default ProductType;

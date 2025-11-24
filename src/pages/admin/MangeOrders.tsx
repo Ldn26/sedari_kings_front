@@ -3,6 +3,7 @@ import { useDeleteOrder, useOrders, useUpdateStatus } from "@/api/Order";
 import Loader from "@/components/Loader";
 import OrderTableItem from "@/components/OrderTableItem";
 import { OrderType } from "../../../types/allTypes";
+import { Package } from "lucide-react";
 export default function ManageOrders() {
   const [searchDate, setSearchDate] = useState(""); 
   const [status, setStatus] = useState("all");
@@ -15,13 +16,13 @@ export default function ManageOrders() {
 
 
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#f7f3ef]  flex items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#f7f3ef]  flex items-center justify-center">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
 
 
 
@@ -52,6 +53,9 @@ export default function ManageOrders() {
         <h1 className="sm:text-2xl  text-xl mb-4  font-bold text-[#5a4634]">
           Gestion des Commandes
         </h1>
+
+   
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           {/* STATUS FILTER */}
           <div className="flex items-center gap-2">
@@ -92,15 +96,27 @@ export default function ManageOrders() {
         </div>
 
         {/* HEADER COLUMNS */}
-    <div className="flex items-center justify-between w-full px-2 py-2 font-semibold text-sm text-[#5a4634] border-b border-gray-300">
-          <div className="flex-1 text-left text-xs sm:text-md sm:w-1/5">Client</div>
-          <div className="flex-1 hidden sm:block text-center text-xs sm:text-md sm:w-1/5">Date</div>
-          <div className="flex-1 text-center text-xs sm:text-md sm:w-1/5">Téléphone</div>
-          <div className="flex-1 hidden sm:block text-center text-xs sm:text-md sm:w-1/5">Prix</div>
-          <div className="flex-1 text-center text-xs sm:text-md sm:w-1/5">Statut</div>
-          <div className="flex-1 flex justify-end text-xs sm:text-md sm:w-1/5">Action</div>
+        <div className="flex items-center justify-between w-full px-2 py-2 font-semibold text-sm text-[#5a4634] border-b border-gray-300">
+          <div className="flex-1 text-left text-xs sm:text-md sm:w-1/5">
+            Client
+          </div>
+          <div className="flex-1 hidden sm:block text-center text-xs sm:text-md sm:w-1/5">
+            Date
+          </div>
+          <div className="flex-1 text-center text-xs sm:text-md sm:w-1/5">
+            Téléphone
+          </div>
+          <div className="flex-1 hidden sm:block text-center text-xs sm:text-md sm:w-1/5">
+            Prix
+          </div>
+          <div className="flex-1 text-center text-xs sm:text-md sm:w-1/5">
+            Statut
+          </div>
+          <div className="flex-1 flex justify-end text-xs sm:text-md sm:w-1/5">
+            Action
+          </div>
         </div>
-
+   
         {/* LIST */}
         <div className="space-y-4 max-h-[750px] overflow-y-auto">
           {filteredOrders.length ? (
@@ -108,9 +124,13 @@ export default function ManageOrders() {
               <OrderTableItem key={order.id} order={order} />
             ))
           ) : (
-            <p className="text-center text-gray-500 py-6">
-              Aucune commande trouvée
+          <div className="text-center py-20 animate-fade-in">
+            <Package className="w-20 h-20 mx-auto mb-6 text-muted-foreground/40" />
+            <p className="text-xl text-muted-foreground">
+              Vous n'avez aucune commande pour le moment
             </p>
+          </div>
+     
           )}
         </div>
       </div>

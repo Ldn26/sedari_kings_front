@@ -18,16 +18,6 @@ function Order() {
     setOpenOrderId(openOrderId === id ? null : id);
   };
 
-  if (isLoading) {
-    return (
-        <>
- 
-      <div className="flex flex-col  items-center justify-center">
-        <Loader />
-      </div>
-        </>
-    );
-  }
 
   return (
       <div className="container mx-auto px-4 py-2 max-w-5xl">

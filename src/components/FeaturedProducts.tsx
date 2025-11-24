@@ -61,7 +61,7 @@ function FeaturedProducts() {
             loop={true}
             modules={[Autoplay]}
             autoplay={{
-              delay: 500,
+              delay: 1500,
               disableOnInteraction: false,
             }}
             breakpoints={{
@@ -69,8 +69,6 @@ function FeaturedProducts() {
               768: { slidesPerView: 3 },
               1024: { slidesPerView: 4 },
             }}
-            // onSlideChange={() => console.log("slide change")}
-            // onSwiper={(swiper) => console.log(swiper)}
           >
             {featuredProducts.map((product: ProductType) => (
               <SwiperSlide key={product.id}>
@@ -94,17 +92,18 @@ function FeaturedProducts() {
             modules={[Autoplay]}
             spaceBetween={20}
             loop={true}
+            // make it play  in the reverse direction
             autoplay={{
-              delay: 500,
+              delay: 1500,
               disableOnInteraction: false,
+              reverseDirection: true,
             }}
+   
             breakpoints={{
               640: { slidesPerView: 2 },
               768: { slidesPerView: 3 },
               1024: { slidesPerView: 4 },
             }}
-            // onSlideChange={() => console.log("slide change")}
-            // onSwiper={(swiper) => console.log(swiper)}
           >
             {featuredProducts2.map((product: ProductType) => (
               <SwiperSlide key={product.id}>

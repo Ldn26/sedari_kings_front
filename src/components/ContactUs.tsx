@@ -131,12 +131,12 @@ export default function ContactUs() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className=" max-w-2xl mx-auto"
+            className=" max-w-3xl mx-auto"
           >
             <img
-              src="/sec5.jpg"
+              src="/sec12.png"
               alt="section  images "
-              className="rounded-xl w-[650px]  h-[400px]"
+              className="rounded-xl w-[650px]  h-[380px]"
             />
           </motion.div>
         </div>

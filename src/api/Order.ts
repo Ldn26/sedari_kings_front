@@ -130,7 +130,7 @@ export const useCreateOrder = () => {
   };
 };
 
-export const useDeleteOrder = () => {
+export const useDeleteOrderOld = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<OrderType, Error, number>({
@@ -156,6 +156,40 @@ export const useDeleteOrder = () => {
 
 
 
+export const useDeleteOrder = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<OrderType, Error, number>({
+    mutationFn: async (id) => {
+      const res = await api.delete(`/order/${id}`);
+      return res.data as OrderType;
+    },
+
+    onSuccess: (_, id) => {
+      queryClient.setQueryData<{ orders: OrderType[] }>(
+        ["orders"],
+        (oldData) => {
+          if (!oldData) return { orders: [] };
+          return {
+            ...oldData,
+            orders: oldData.orders.filter((o) => o.id !== id),
+          };
+        }
+      );
+
+      queryClient.invalidateQueries({ queryKey: ["order", id] });
+    },
+  });
+
+  return {
+    deleteOrder: mutation.mutate,
+    data: mutation.data,
+    isLoading: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error,
+    isSuccess: mutation.isSuccess,
+  };
+};
 
 
 
