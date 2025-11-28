@@ -115,7 +115,7 @@ function UserSideBar() {
                   <Link
                     onClick={() => setOpenSide(true)}
                     to={route.path}
-                    className={`text-[15px] border flex items-center rounded px-4 py-2 transition-all font-medium ${
+                    className={`text-[15px]  flex items-center rounded px-4 py-2 transition-all font-medium ${
                       isActive
                         ? "hover:bg-orange-900 text-white  bg-primary"
                         : "text-slate-800 hover:text-slate-900 hover:bg-gray-200"

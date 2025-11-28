@@ -5,20 +5,32 @@ import {
   ChevronUp,
   Package,
   Calendar,
+  Trash2,
 } from "lucide-react";
-import { useOrdersClient } from "@/api/Order";
+import { useDeleteOrder, useOrdersClient } from "@/api/Order";
 import Loader from "@/components/Loader";
 import { OrderType } from "types/allTypes";
 
 function Order() {
     const { data, isLoading } = useOrdersClient();
   const [openOrderId, setOpenOrderId] = useState<number | null>(null);
+  const { deleteOrder, isLoading: deleteLoading } = useDeleteOrder();
 
   const toggleOrder = (id: number) => {
     setOpenOrderId(openOrderId === id ? null : id);
-  };
+  }; 
 
 
+
+
+
+    const handleDelete = (id: number) => {
+      deleteOrder(id);
+      // setOpenModel(false);
+      // setAllowEdit(false);
+    };
+
+   
   return (
       <div className="container mx-auto px-4 py-2 max-w-5xl">
         <div className="mb-4 animate-fade-in">
@@ -127,7 +139,7 @@ function Order() {
                         >
                           <div className="flex justify-between items-center">
                             <div className="flex-1">
-                              <p className="text-foreground font-semibold text-lg mb-1">
+                              <p className="text-foreground font-semibold text-md  mb-1">
                                 {item.name}
                               </p>
                               <p className="text-muted-foreground text-sm">
@@ -153,14 +165,24 @@ function Order() {
                     {/* Order Summary */}
                     <div className="mt-6 pt-4 border-t border-border">
                       <div className="flex justify-between items-center">
-                        <span className="text-lg font-semibold text-foreground">
-                          Total de la commande
+                        <span className="text-lg  font-semibold text-foreground">
+                          Total  :  
                         </span>
-                        <span className="text-3xl font-bold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
+                        <span className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
                           {total.toFixed(2)} €
-                        </span>
+                        </span>  
+
                       </div>
                     </div>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleDelete(order.id);
+                                        }}
+                                        className="text-destructive mt- hover:scale-110 transition-all bg-white flex items-center justify-center rounded-md p-1 border shadow-sm"
+                                      >
+                                        <Trash2 className="sm:h-6 w-6 h-6 sm:w-6" />
+                                      </button>
                   </div>
                 </div>
               </div>

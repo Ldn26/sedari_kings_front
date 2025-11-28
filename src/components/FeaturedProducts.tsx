@@ -92,7 +92,6 @@ function FeaturedProducts() {
             modules={[Autoplay]}
             spaceBetween={20}
             loop={true}
-            // make it play  in the reverse direction
             autoplay={{
               delay: 1500,
               disableOnInteraction: false,

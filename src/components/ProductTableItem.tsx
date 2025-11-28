@@ -6,12 +6,14 @@ import GetProductPopUp from "./GetProductPopUp";
 import { useState } from "react";
 import { useDeleteProduct } from "../api/Products";
 import ProductType from "types/allTypes";
+  //  const addURL =
+  //    import.meta.env.MODE === "development" ? "https://kingofsedari.com" : ""; 
 
 function ProductTableItem({ product }: { product: ProductType }) {
   const [openModel, setOpenModel] = useState(false);
   const [allowEdit, setAllowEdit] = useState(false);
   const { deleteProduct, isLoading: DeleteLoader, data } = useDeleteProduct();
-  
+
 
 
 
@@ -57,7 +59,7 @@ function ProductTableItem({ product }: { product: ProductType }) {
               <img
                 src={
                   product.imageUrl && product.imageUrl.length > 0
-                    ? product.imageUrl[0].url
+                    ?  product.imageUrl[0]
                     : "/placeholder.svg"
                 }
                 alt={product.name}

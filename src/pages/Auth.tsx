@@ -141,7 +141,7 @@ const { SetAccessToken } = useUserStore();
                     <Input
                       id="email-signin"
                       type="email"
-                      placeholder="votre_main@email.com"
+                      placeholder="Votre_Email@email.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -152,7 +152,7 @@ const { SetAccessToken } = useUserStore();
                     <Input
                       id="password-signin"
                       type="password"
-                      placeholder="votre mot de passe "
+                      placeholder="Votre mot de passe "
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -182,7 +182,7 @@ const { SetAccessToken } = useUserStore();
                     <Input
                       id="email-signup"
                       type="email"
-                      placeholder="votre_mail@email.com"
+                      placeholder="Votre_Email@email.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -193,7 +193,7 @@ const { SetAccessToken } = useUserStore();
                     <Input
                       id="password-signup"
                       type="password"
-                      placeholder="votre mot de passe "
+                      placeholder="Votre mot de passe "
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required

@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 import ConfirmSellPopUP from "@/components/ConfirmSellPopUP";
 import { useState } from "react";
 import ProductType from "types/allTypes";
-
+ const addURL =import.meta.env.MODE == "development" ? "https://kingofsedari.com/" : ""; 
+  
 
 export default function Cart() {
   const { toast } = useToast();
@@ -44,9 +45,8 @@ const removeElement = (itemId: number) => {
 
 
 
-
   return (
-    <div >
+    <div>
       {Open && <ConfirmSellPopUP setOpenModel={SetOpenModel} />}
 
       <div className="container mx-auto px-4 py-12">
@@ -69,13 +69,17 @@ const removeElement = (itemId: number) => {
         ) : (
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
-              {cart.map((item :ProductType) => (
+              {cart.map((item: ProductType) => (
                 <Card key={item.id} className="animate-fade-in-up">
                   <CardContent className="p-6">
                     <div className="flex gap-4">
-                      <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">  
+                      <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                         <img
-                          src={item?.imageUrl[0]?.url || "/placeholder.svg"}
+                          src={
+                            item.imageUrl && item.imageUrl.length > 0
+                              ? addURL + item.imageUrl[0]
+                              : "/placeholder.svg"
+                          }
                           alt={item.name}
                           className="w-full h-full object-cover"
                         />
@@ -94,12 +98,9 @@ const removeElement = (itemId: number) => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() =>
-                             {
-                                    updateQuantity(item.id, item.quantity - 1);
-                             }
-
-                              }
+                              onClick={() => {
+                                updateQuantity(item.id, item.quantity - 1);
+                              }}
                               disabled={item.quantity <= 1}
                             >
                               <Minus className="h-4 w-4" />
@@ -110,11 +111,9 @@ const removeElement = (itemId: number) => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() =>{
-                                   updateQuantity(item.id, item.quantity + 1);
-                              }
-                          
-                              }
+                              onClick={() => {
+                                updateQuantity(item.id, item.quantity + 1);
+                              }}
                               disabled={item.quantity >= (item.quantity || 0)}
                             >
                               <Plus className="h-4 w-4" />
@@ -163,8 +162,10 @@ const removeElement = (itemId: number) => {
                   </div>
 
                   <Button
-                  onClick={()=>SetOpenModel(true)}
-                  className="w-full" size="lg">
+                    onClick={() => SetOpenModel(true)}
+                    className="w-full"
+                    size="lg"
+                  >
                     Envoyer votre commande
                   </Button>
                   <Button

@@ -31,14 +31,6 @@ const App = () => (
         <Routes>
           <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<Index />} />
-          {/* <Route
-            path="/produits"
-            element={
-              <ProtectedRoute>
-                <Products />
-              </ProtectedRoute>
-            }
-          /> */}
 
           <Route
             path="/"
@@ -48,17 +40,11 @@ const App = () => (
               </ProtectedRoute>
             }
           >
-            {/* <Route index element={<Products />} /> */}
             <Route path="panier" element={<Cart />} />
             <Route path="orders" element={<Order />} />
             <Route path="produits" element={<Products />} />
-
-            {/* <Route path="produit/:id" element={<GetProductPopUp  />} /> */}
-            {/* <Route path="dashboard" element={<Dashboard />} /> */}
-            {/* <Route path="users" element={<Users />} /> */}
           </Route>
           <Route path="/produit/:id" element={<ProductDetail />} />
-          {/* <Route path="/panier" element={<Cart />} /> */}
 
           <Route
             path="/admin"
@@ -75,18 +61,10 @@ const App = () => (
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="manage-orders" element={<MangeOrders />} />
           </Route>
-          {/* <Route
-            path="/orders"
-            element={
-              <ProtectedRoute>
-                <Order />
-              </ProtectedRoute>
-            }
-          /> */}
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-      {/* </AuthProvider> */}
     </TooltipProvider>
   </QueryClientProvider>
 );

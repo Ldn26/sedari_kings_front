@@ -20,8 +20,6 @@ export default function Products() {
 
 
 
-
-
   const categories = [
     { value: "all", label: "Tous" },
     { value: "table", label: "Table" },

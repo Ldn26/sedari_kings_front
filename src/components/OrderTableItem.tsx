@@ -3,7 +3,6 @@ import { Trash2, Edit3 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import GetOrderPopUp from "./GetOrderPopUp";
 import { useDeleteOrder } from "@/api/Order";
-
 function OrderTableItem({ order }) {
   const [openModel, setOpenModel] = useState(false);
   const [allowEdit, setAllowEdit] = useState(false);

@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ProductType from "types/allTypes"; // import your type
+//  const addURL =import.meta.env.MODE === "development" ? "https://kingofsedari.com" : ""; 
 
 interface ProductCardProps {
   product: ProductType;
@@ -10,10 +11,11 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
 
-
+  
 
   const navigate = useNavigate();
-  const { id, name, price, category, imageUrl, quantity } = product;
+  const { id, name, price, category, imageUrl, quantity } = product;  
+
   return (
     <Card
       className="group overflow-hidden border-border hover:shadow-lg transition-all duration-300 cursor-pointer animate-fade-in-up bg-card"
@@ -23,7 +25,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         <img
           src={
             imageUrl && imageUrl.length > 0
-              ? imageUrl[0].url
+              ? imageUrl[0]
               : "/placeholder.svg"
           }
           alt={name}

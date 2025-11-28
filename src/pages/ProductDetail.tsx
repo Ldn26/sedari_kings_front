@@ -11,14 +11,15 @@ import Loader from "@/components/Loader";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
  import useUserStore  from "../store/store";
+//  const addURL =import.meta.env.MODE === "development"  ? "https://kingofsedari.com" : ""; 
 export default function ProductDetail() {
-  const { id } = useParams();
+  const { id } = useParams();  
   const { data: product, isLoading, isError } = useProduct(id);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
-  
+    const user = useUserStore((state) => state.user);
   const { addTocart } = useUserStore.getState();
   
 const handleAddToCart = () => {
@@ -47,16 +48,14 @@ const handleAddToCart = () => {
   }
 };
 
-console.log("Product url ")
-  console.log(product)
-
+console.log("Product  ")
+console.log(product)
 
 const convertToImageGalleryItems = (images: { url: string }[]) =>
   images.map((img) => ({
-    original: img.url,
-    thumbnail: img.url,
+    original: img,
+    thumbnail:img,
   }));
-
   if (isLoading)
     return (
       <div className="min-h-screen bg-background">
@@ -83,32 +82,41 @@ const convertToImageGalleryItems = (images: { url: string }[]) =>
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="animate-fade-in w-full rounded-lg bg-muted">
-            <ImageGallery
-              items={
-                product.imageUrl
-                  ? convertToImageGalleryItems(product.imageUrl)
-                  : []
-              }
-              showPlayButton={false}
-              showFullscreenButton={true}
-              isfullscreen={false}
-              thumbnailPosition="bottom"
-              showNav={true}
-              lazyLoad={true}
-              showBullets={true}
-              additionalClass="rounded-lg"
-              renderItem={(item) => {
-                // console.log("Image URL:", item.original); // log safely here
-                return (
-                  <img
-                    src={item.original}
-                    alt={product.name}
-                    style={{ width: "100%", height: "auto" }}
-                    className="rounded-lg max-h-[80vh] md:max-h-[90vh] object-contain"
-                  />
-                );
-              }}
-            />
+            {product.imageUrl.length > 0  ? (
+              <ImageGallery
+                items={
+                  product.imageUrl 
+                    ? convertToImageGalleryItems(product?.imageUrl)
+                    : [ ]
+                }
+                showPlayButton={false}
+                showFullscreenButton={true}
+                isfullscreen={false}
+                thumbnailPosition="bottom"
+                showNav={true}
+                lazyLoad={true}
+                showBullets={true}
+                additionalClass="rounded-lg"
+                renderItem={(item) => {
+                  console.log("Image URL:", item.original);
+                  return (
+                    <img
+                      src={item.original || "/placeholder.svg"}
+                      alt={product.name}
+                      style={{ width: "100%", height: "auto" }}
+                      className="rounded-lg max-h-[80vh] md:max-h-[90vh] object-contain"
+                    />
+                  );
+                }}
+              />
+            ) : (
+              <img
+                src={"/placeholder.svg"}
+                alt={product.name}
+                style={{ width: "100%", height: "auto" }}
+                className="rounded-lg max-h-[80vh] md:max-h-[90vh] object-contain"
+              />
+            )}
           </div>
           {/* Right: Product Info */}
           <div className="animate-fade-in-up flex flex-col gap-6">
@@ -163,16 +171,27 @@ const convertToImageGalleryItems = (images: { url: string }[]) =>
               ) : (
                 <p className="text-sm text-destructive">Rupture de stock</p>
               )}
-
-              <Button
-                size="lg"
-                className="w-full"
-                onClick={handleAddToCart}
-                disabled={loading || product.quantity <= 0}
-              >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                {loading ? "Ajout en cours..." : "Ajouter au Panier"}
-              </Button>
+              {user ? (
+                <Button
+                  size="lg"
+                  className="w-full"
+                  onClick={handleAddToCart}
+                  disabled={loading || product.quantity <= 0}
+                >
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  {loading ? "Ajout en cours..." : "Ajouter au Panier"}
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  className="w-full"
+                  onClick={() => navigate("/auth")}
+                  disabled={loading || product.quantity <= 0}
+                >
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  {loading ? "Ajout en cours..." : "Ajouter au Panier"}
+                </Button>
+              )}
             </div>
           </div>
         </div>

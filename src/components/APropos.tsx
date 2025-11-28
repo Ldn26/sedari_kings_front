@@ -84,12 +84,12 @@ function APropos() {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <div className="relative rounded-md overflow-hidden shadow-2xl group">
-              <motion.img
-                src="/sec.jpg"
+              <img
+                src="/sec16.png"         
                 alt="Salon marocain luxueux"
                 className="w-full h-96 object-covver"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.7 }}
+                // whileHover={{ scale: 1.05 }}
+                // transition={{ duration: 0.7 }}
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-[#7B542F]/50 to-transparent" />
